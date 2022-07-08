@@ -1,0 +1,87 @@
+@extends('Layouts.layout')
+
+@section('content')
+    <div class="container">
+        <div class="row card text-white bg-dark">
+            <h4 class="card-header">Edit Client</h4>
+            <a class="btn btn-primary" href="{{ route('client.index') }}">Retour</a>
+
+
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            {{-- <form action="{{ route('client.update', ['client' => $client->id]) }}" method="POST">
+                @csrf
+                @method('PUT') --}}
+
+                <div class="row">
+                    <div class="card my-10 bg-dark">
+                        <div class="form-group">
+                            <strong>Raison social:</strong>
+                            <input type="text" name="raisonSocial" value="{{ $client->raisonSocial }}"
+                                class="form-control" placeholder="raisonSocial">
+                        </div>
+                        <div class="form-group">
+                            <strong>Adresse:</strong>
+                            <input type="text" name="adresse" value="{{ $client->adresse }}" class="form-control"
+                                placeholder="adresse">
+                        </div>
+                        <div class="form-group">
+                            <strong>Complement d'adresse:</strong>
+                            <input type="text" name="complAdresse" value="{{ $client->complAdresse }}"
+                                class="form-control" placeholder="complement d'adresse">
+                        </div>
+                        <div class="form-group">
+                            <strong>Code postal:</strong>
+                            <input type="text" name="codePostal" value="{{ $client->codePostal }}" class="form-control"
+                                placeholder="codePostal">
+                        </div>
+                        <div class="form-group">
+                            <strong>Ville:</strong>
+                            <input type="text" name="ville" value="{{ $client->ville }}" class="form-control"
+                                placeholder="ville">
+                        </div>
+                        <div class="form-group">
+                            <strong>Pays:</strong>
+                            <input type="text" name="pays" value="{{ $client->pays }}" class="form-control"
+                                placeholder="pays">
+                        </div>
+                        <div class="form-group">
+                            <strong>Téléphone:</strong>
+                            <input type="text" name="telephone" value="{{ $client->telephone }}" class="form-control"
+                                placeholder="telephone">
+                        </div>
+                        <div class="form-group">
+                            <strong>Nom:</strong>
+                            <input type="text" name="name" value="{{ $client->name }}" class="form-control"
+                                placeholder="Nom">
+                        </div>
+                        <div class="form-group">
+                            <strong>Prénom:</strong>
+                            <input type="text" name="firstname" value="{{ $client->firstname }}" class="form-control"
+                                placeholder="Prénom">
+                        </div>
+                        <div class="form-group">
+                            <strong>Email:</strong>
+                            <input type="text" name="email" value="{{ $client->email }}" class="form-control"
+                                placeholder="email">
+                        </div>
+                    </div>
+                    <a class="btn btn-success" href="{{ route('client.update', ['client' => $client]) }}">Update Client</a>
+                    {{-- <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div> --}}
+                </div>
+
+            {{-- </form> --}}
+        </div>
+    </div>
+@endsection

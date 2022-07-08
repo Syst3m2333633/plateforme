@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use App\Models\User;
 use App\Models\Event;
 use Illuminate\Http\Request;
@@ -16,7 +17,8 @@ class DropzoneController extends Controller
     public function dropzone()
     {
         // $user = User::all();
-        return view('devis.create', compact('user'));
+        // $clients = Client::all();
+    return view('devis.create', compact('user'));
     }
 
     /**
@@ -24,17 +26,14 @@ class DropzoneController extends Controller
      *
      * @return void
      */
-    public function dropzoneStore(Request $request, $name)
+    public function dropzoneStore(Request $request)
     {
 
-        // $request->validate([
-        //     'file' => 'required|mimes:pdf,txt,csv,xls,xlxs,doc,docx,jpeg,png|max:2048',
-        // ]);
-        $users = User::findByName($name);
+
+        $clients = Client::all();
         $image = $request->file('file');
         $imageName = $image->getClientOriginalName();
-        $image->move(storage_path('public/'. $users .'/devis'), $imageName);
-
+        $image->move(storage_path('public/devis'), $imageName);
         return response()->json(['success' => $imageName]);
     }
 
@@ -45,6 +44,7 @@ class DropzoneController extends Controller
      */
     public function dropfacturesStore(Request $request)
     {
+        $clients = Client::all();
 
         $image = $request->file('file');
 
@@ -64,7 +64,7 @@ class DropzoneController extends Controller
 
         $image = $request->file('file');
 
-        $imageName = $image;//->getClientOriginalName()
+        $imageName = $image->getClientOriginalName();
         $image->move(storage_path('public/event'), $imageName);
         $event = new Event();
         $event->titre = $request->titre;

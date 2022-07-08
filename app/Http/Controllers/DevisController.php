@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Client;
 use Illuminate\Http\Request;
 
 class DevisController extends Controller
@@ -25,7 +26,8 @@ class DevisController extends Controller
     public function create()
     {
         $users = User::all();
-        return view('devis.create', compact('users'));
+        $clients = Client::all();
+        return view('devis.create', compact('users', 'clients'));
     }
 
     /**

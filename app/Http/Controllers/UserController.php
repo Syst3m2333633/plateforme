@@ -45,16 +45,10 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-
         $clients = User::all();
         $user = new User();
         Storage::MakeDirectory($request->name . '/devis');
         Storage::MakeDirectory($request->name . '/factures');
-
-        // User::makeDirectory('public/' . $user->name => $request->name);
-        // $repo = $request->file('file');
-        // $repoName = $repo;
-        // $repo->move(storage_path('public/' .$user->name = $request->name), $repoName);
 
         $user->name = $request->name;
         $user->firstname = $request->firstname;
@@ -70,6 +64,11 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
         return view('user.create', compact('clients'));//, compact('clients')
+
+                // User::makeDirectory('public/' . $user->name => $request->name);
+                // $repo = $request->file('file');
+                // $repoName = $repo;
+                // $repo->move(storage_path('public/' .$user->name = $request->name), $repoName);
     }
 
     /**

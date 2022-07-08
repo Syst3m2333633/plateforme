@@ -1,49 +1,53 @@
 @extends('Layouts.layout')
 
 @section('content')
+    <div class="container mt-2">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="mt-2 mb-2">Devis</h1>
 
-
-<div class="container mt-2">
-    <div class="row">
-        <div class="col-md-12">
-            <h1 class="mt-2 mb-2">Devis</h1>
-
-
-
-            <form action="{{ route('dropzone.store', ['id' => $users->id]) }}" method="post" enctype="multipart/form-data" id="image-upload" class="dropzone">
-                @csrf
-                <select name="user" id="user">
-                    @foreach ($users as $user)
-                        <option value="{{ $user->id }}">{{ $user->name }}</option>
-                    @endforeach
+                <select name="client" id="client">
+                @foreach ($clients as $client)
+                    <option value="{{ $client->id }}">{{ $client->name }}</option>
+                @endforeach
                 </select>
-                <div>
-                    <h3>Ajout de plusieurs devis en cliquand ou en dépossant sur la fenêtre</h3>
-                </div>
-            </form>
+
+                <form action="{{ route('dropzone.store'{{--, ['id' => $users->id]--}}) }}" method="post"
+
+                    enctype="multipart/form-data" id="image-upload" class="dropzone">
+                    @csrf
+                    {{-- <select name="user" id="user">
+                        @foreach ($users as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                        @endforeach
+                    </select> --}}
+                    <div>
+                        <h3>Ajout de plusieurs devis en cliquant ou en déposant sur la fenêtre</h3>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="mt-2 mb-2">Factures</h1>
+
+                <form action="{{ route('dropfactures.store') }}" method="post" enctype="multipart/form-data"
+                    id="image-upload" class="dropzone">
+                    @csrf
+                    <div>
+                        <h3>Ajout de plusieurs factures en cliquant ou en déposant sur la fenêtre</h3>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <h1 class="mt-2 mb-2">Factures</h1>
 
-            <form action="{{ route('dropfactures.store') }}" method="post" enctype="multipart/form-data" id="image-upload" class="dropzone">
-                @csrf
-                <div>
-                    <h3>Ajout de plusieurs factures en cliquand ou en dépossant sur la fenêtre</h3>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<script type="text/javascript">
+    <script type="text/javascript">
         Dropzone.options.imageUpload = {
-            maxFilesize         :       1,
+            maxFilesize: 1,
             acceptedFiles: ".pdf"
         };
-</script>
-
+    </script>
 @endsection
 
 
@@ -76,8 +80,7 @@
 
 </head>
 <body> --}}
-{{--
-<div class="container mt-4">
+{{-- <div class="container mt-4">
 
   <h2 class="text-center">File Upload in Laravel 9 - Tutsmake.com</h2>
 

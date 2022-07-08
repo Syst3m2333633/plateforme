@@ -7,14 +7,16 @@ use App\Models\Facture;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Silber\Bouncer\Bouncer;
 
 class User extends Authenticatable
 {
 
 
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRolesAndAbilities;
 
     //Relation entre user et devis
     public function devis()
@@ -55,11 +57,31 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
+        'role' => Role::class,
         'email_verified_at' => 'datetime',
     ];
 
     public function files()
     {
       return $this->hasMany(File::class);
+    }
+
+    public function bouncer()
+    {
+    //Bouncer
+    // $admin = Bouncer::role()->firstOrCreate([
+    //     'name' => 'admin',
+    //     'title' => 'Administrator',
+    // ]);
+
+    // $ban = Bouncer::ability()->firstOrCreate([
+    //     'name' => 'ban-users',
+    //     'title' => 'Ban users',
+    // ]);
+
+    // Bouncer::allow($admin)->to($ban);
+
+    // $user = User::find(1);
+    // $user->assign('admin');
     }
 }

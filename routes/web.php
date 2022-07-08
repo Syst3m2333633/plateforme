@@ -1,8 +1,11 @@
 <?php
 
+use App\Models\User;
+use App\Models\Client;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DevisController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DropzoneController;
 
 // use App\Http\Controllers\EventController;
@@ -20,7 +23,8 @@ use App\Http\Controllers\DropzoneController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    // dd(Client::first()->role);
+    return view('auth.login');
 });
 
 Route::get('/dashboard', function () {
@@ -31,6 +35,16 @@ require __DIR__.'/auth.php';
 
 
 Route::resource('user', UserController::class);
+// Route::get('client/{client:slug}', function (Client $clients) {
+//     return $clients;
+// });
+Route::get('client/trash', [ClientController::class, 'trash'])->name('client.trash');
+Route::get('client/{client}/restore', [ClientController::class, 'restore'])->withTrashed()->name('client.restore');
+
+// Route::get('client/{client:slug}/show', [ClientController::class, 'edit'])->name('clientShow');
+
+Route::resource('client', ClientController::class, ['parameters' =>['client' => 'client:slug']]);
+
 Route::get('dropzone', [DropzoneController::class, 'dropzone']);
 Route::post('dropzone/store', [DropzoneController::class, 'dropzoneStore'])->name('dropzone.store');
 Route::post('dropfactures/store', [DropzoneController::class, 'dropfacturesStore'])->name('dropfactures.store');
