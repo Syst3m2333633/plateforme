@@ -13,22 +13,30 @@
             <div class="card my-10 bg-dark">
                 <h5 class="card-header bg-dark">Recherche par raison sociale ou nom</h5>
 
-                <form class="card-body bg-dark" action="{{--{{ route('client.search', $clients) }}--}}" method="GET" role="search">
+                <form class="card-body bg-dark" action="{{ url('/search') }}" method="GET" role="search">
                     @csrf
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Rechercher..." name="term">
+                        <input type="search" class="form-control" placeholder="Rechercher..." name="searchClient">
                         <span class="input-group-btn">
                     <button class="btn btn-secondary" type="submit">Go!</button>
                   </span>
                     </div>
                 </form>
             </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <h1 class="my-4">Résultat de recherche pour:
+                        {{-- <small>{{$key}}</small> --}}
+                    </h1>
+                </div>
+            </div>
+
         <a class="btn btn-primary" href="{{ route('dashboard') }}">Retour</a>
 
         <table>
             <thead>
                 <tr>
-                    <th>raison social</th><th>email</th><th>téléphone</th>
+                    <th>raison social</th><th>slug</th><th>email</th><th>téléphone</th>
                     <th>nom du responsable / contact</th><th>prénom du responsable / contact</th>
                     @if ( auth()->user()->isAn('admin'))
                     <th>actions</th>
@@ -38,7 +46,7 @@
             <tbody>
                 @foreach ($clients as $client)
                 <tr>
-                    <td>{{ $client->raisonSocial }}</td><td><a href="mailto:{{$client->email}}">{{ $client->email }}</a></td><td><a href="tel:{{ $client->telephone }}">{{ $client->telephone }}</a></td>
+                    <td>{{ $client->raisonSocial }}</td><td>{{ $client->slug }}</td><td><a href="mailto:{{$client->email}}">{{ $client->email }}</a></td><td><a href="tel:{{ $client->telephone }}">{{ $client->telephone }}</a></td>
                     <td style="text-align:center;">{{ $client->name }}</td><td style="text-align:center;">{{ $client->firstname }}</td>
                     @if ( auth()->user()->isAn('admin'))
                     <td style="background:white">

@@ -2,14 +2,15 @@
 
 namespace Database\Seeders;
 
-use App\Models\Client;
 use Bouncer;
 use App\Models\User;
+use App\Models\Client;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Database\Seeders\DevisSeeder;
 use Database\Seeders\ClientSeeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,10 +21,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         $this->call([
-            ClientSeeder::class,
-        ]);
-
         \Bouncer::allow('admin')->toManage(Client::class);
         \Bouncer::allow('admin')->toManage(User::class);
         //\Bouncer::allow('admin')->to('update', \App\Models\User::class);
@@ -36,10 +33,14 @@ class DatabaseSeeder extends Seeder
         $admin->assign('admin');
 
         $user = \App\Models\User::factory()->create([
+            'name' => 'client',
             'email' => 'client@example.com',
             'password' => Hash::make('wiklog1234'),
         ]);
         $user->assign('client');
 
+        $this->call([
+            ClientSeeder::class,
+        ]);
     }
 }

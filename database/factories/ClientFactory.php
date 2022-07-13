@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -34,8 +35,10 @@ class ClientFactory extends Factory
             'firstname' => $this->faker->firstName(),
             'email' => $this->faker->email(),
             'password' => $this->faker->password(),
-            'path' => $this->faker->imageUrl(640, 480),
-
+            'avatar' => $this->faker->imageURL(640, 480),
+            // Storage::MakeDirectory($raisonSocial . '/logo'),
+            // Storage::MakeDirectory($raisonSocial . '/devis'),
+            // Storage::MakeDirectory($raisonSocial . '/factures'),
         ];
     }
 }

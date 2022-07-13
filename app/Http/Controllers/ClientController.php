@@ -6,13 +6,13 @@ use Bouncer;
 use App\Models\Client;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
-use Cviebrock\EloquentSluggable\Services\SlugService;
 
 class ClientController extends Controller
 {
@@ -28,10 +28,14 @@ class ClientController extends Controller
         return view('client.index', compact('clients'));
     }
 
-    public function searchClient(Request $request, Client $client)
+    public function search(Request $request)
     {
-        $clients = Client::search($client)->get();
-        return $clients;
+        $search_text = $_GET['searchClient'];
+        $clients = Client::where('raisonSocial', 'LIKE', '%' . $search_text. '%')
+                        ->orWhere('name', 'LIKE', '%' . $search_text. '%')
+                        ->get();
+
+        return view('client.search', compact('clients'));
     }
 
     /**
@@ -41,6 +45,7 @@ class ClientController extends Controller
      */
     public function create()
     {
+        // $key = trim($request->get('term'));
         return view('client.create');
     }
 
@@ -59,9 +64,9 @@ class ClientController extends Controller
      */
     public function store(StoreClientRequest $request)
     {
-        Storage::MakeDirectory($request->raisonSocial . '/logo');
-        Storage::MakeDirectory($request->raisonSocial . '/devis');
-        Storage::MakeDirectory($request->raisonSocial . '/factures');
+        // Storage::MakeDirectory($request->raisonSocial . '/logo');
+        // Storage::MakeDirectory($request->raisonSocial . '/devis');
+        // Storage::MakeDirectory($request->raisonSocial . '/factures');
         $request->validate([
             'raisonSocial' => 'required',
             'adresse' => 'required',
@@ -74,11 +79,15 @@ class ClientController extends Controller
             'firstname' => 'required',
             'email' => 'required',
             'password' => 'required',
+            // 'avatar' => 'required',//|mimes:jpeg,png,jpg,gif,svg|max:1024
         ]);
+        $logo = $request->file('avatar');
+        $logoName = $logo->getClientOriginalName();
+        $logo->move(storage_path('app/' . $request->raisonSocial . '/logo'), $logoName);
 
         $insert = [
             'raisonSocial' => $request->raisonSocial,
-            'slug' => Str::slug($request->raisonSocial),/*[SlugService::createSlug(Client::class, 'slug', $request->raisonSocial)]*/
+            'slug' => Str::slug($request->raisonSocial),
             'adresse' => $request->adresse,
             'complAdresse' => $request->complAdresse,
             'codePostal' => $request->codePostal,
@@ -89,6 +98,7 @@ class ClientController extends Controller
             'firstname' => $request->firstname,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'avatar' => $request->avatar->getClientOriginalName(),
         ];
 
         Client::insertGetId($insert);
@@ -96,57 +106,20 @@ class ClientController extends Controller
         return Redirect::to('client')
        ->with('success','Greate! posts created successfully.');
 
-
-        // $data = $request->validate();
-        // $client = new Client();
-        // $clients = Client::all();
-
-        //Creation de stockage individuel
+       //Creation de stockage individuel
         Storage::MakeDirectory($request->raisonSocial . '/logo');
         Storage::MakeDirectory($request->raisonSocial . '/devis');
         Storage::MakeDirectory($request->raisonSocial . '/factures');
-
-        // $client->raisonSocial = $data['raisonSocial'];
-        // $client->slug = Str::slug($data['slug']);
-        // $client->adresse = $data['adresse'];
-        // $client->complAdresse = $data['complAdresse'];
-        // $client->codePostal = $data['codePostal'];
-        // $client->ville = $data['ville'];
-        // $client->pays = $data['pays'];
-        // $client->telephone = $data['telephone'];
-        // $client->name = $data['name'];
-        // $client->firstname = $data['firstname'];
-        // $client->email = $data['email'];
-
-        // //PASSWORD
-        // $client->password = Hash::make($request->password);
-
-        // //SAVE
-        // $client->save();
 
         return Redirect::to('client')
         ->with('success', 'Greate ! Client created successfully.');
 
     }
 
-    public function addClient()
+    public function image(Client $client)
     {
-        $client = Client::insert([
-            "raisonSocial" => "Airbus",
-            "adresse" => "51 rue de la soif",
-            "complAdresse" => "3 eme bar à droite",
-            "codePostal" => "35000",
-            "ville" => "Rennes",
-            "pays" => "France",
-            "telephone" => "0102030405",
-            "name" => "subria",
-            "firstname" => "plane",
-            "email" => "airbus@boeing.fr",
-            "password" => Hash::make("wiklog1234"),
-            "path" => "https://via.placeholder.com/640x480.png/00bb66?text=aliquam",
-
-        ]);
-        dd($client);
+        $image = Image::make($client->image);
+            return $image->response();
     }
 
     /**
@@ -157,8 +130,7 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
-        $clients = Client::all();
-        return view('client.show', compact('clients'));
+        return view('client.update');
     }
 
     /**
@@ -181,41 +153,32 @@ class ClientController extends Controller
      */
     public function update(UpdateClientRequest $request, Client $client)
     {
+        // $rS = 'raisonSocial';
+        // $data = $request->input();
+        // $slug = Str::slug($client->raisonSocial);
+        $request->validate([
+            'raisonSocial' => 'required',
+            // $data ['slug'] = str_replace(' ', '-', strtolower($data['raisonSocial'])),
+            // 'slug' => Str::slug($request->raisonSocial), //====== 'slug' => str::slug($data['raisonSocial']),
+            // 'slug' => Str::slug('raisonSocial'),
+            // 'slug' => 'required',
+            // 'slug' => $slug,
+            'slug' => Str::slug($request->raisonSocial),
+            'adresse' => 'required',
+            'complAdresse' => 'required',
+            'codePostal' => 'required',
+            'ville' => 'required',
+            'pays' => 'required',
+            'telephone' => 'required',
+            'name' => 'required',
+            'firstname' => 'required',
+            'email' => 'required',
+        ]);
+
         $client->update($request->all());
 
             return redirect()->route('client.index')
                 ->with('success', 'Client updated Succssfully');
-
-
-        // DB::table('client')
-        //     ->where('id', $id)
-        //     ->update([
-        //         'raisonSocial' => $request->raisonSocial,
-        //         'adresse' => $request->adresse,
-        //         'complAdresse' => $request->complAdresse,
-        //         'codePostal' => $request->codePostal,
-        //         'ville' => $request->ville,
-        //         'pays' => $request->pays,
-        //         'telephone' => $request->telephone,
-        //         'name' => $request->name,
-        //         'firstname' => $request->firstname,
-        //         'email' => $request->email,
-        //         'password' => $request->password,
-        //     ], ['raisonSocial', 'adresse', 'complAdresse', 'codePostal',
-        //         'ville', 'pays', 'telephone', 'name', 'firstname', 'email', 'password']);
-
-            // $request->validate([
-            //     'raisonSocial' => 'required',
-            //     'adresse' => 'required',
-            //     'complAdresse' => 'required',
-            //     'codePostal' => 'required',
-            //     'ville' => 'required',
-            //     'pays' => 'required',
-            //     'telephone' => 'required',
-            //     'name' => 'required',
-            //     'firstname' => 'required',
-            //     'email' => 'required',
-            // ]);
     }
 
     /**

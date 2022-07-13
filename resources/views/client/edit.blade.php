@@ -3,7 +3,9 @@
 @section('content')
     <div class="container">
         <div class="row card text-white bg-dark">
-            <h4 class="card-header">Edit Client</h4>
+            {{-- <h4 class="card-header">Edit Client</h4>{{$client->avatar}} --}}
+            <img class="img-fluid" style="height:40vh" src="{{ route('client.image', ['client' => $client->slug]) }}">
+            {{-- <img src="{{route('storage/' . $client->raisonSocial . '/logo/' . $client->avatar) }}" alt="avatar"> --}}
             <a class="btn btn-primary" href="{{ route('client.index') }}">Retour</a>
 
 
@@ -18,17 +20,31 @@
                 </div>
             @endif
 
-            {{-- <form action="{{ route('client.update', ['client' => $client->id]) }}" method="POST">
-                @csrf
-                @method('PUT') --}}
+                <form action="{{ route('client.update', ['client' => $client]) }}" method="POST">
+                    @csrf
+                    @method('PUT')
 
                 <div class="row">
                     <div class="card my-10 bg-dark">
                         <div class="form-group">
+                            <strong>Id:</strong>
+                            <input type="text" name="identity" value="{{ $client->id }}" class="form-control"
+                                placeholder="identity">
+                        </div>
+                        <div class="form-group">
                             <strong>Raison social:</strong>
-                            <input type="text" name="raisonSocial" value="{{ $client->raisonSocial }}"
+                            {{-- <input type="text" name="raisonSocial" value="{{ $client->raisonSocial }}"
+                                class="form-control" placeholder="raisonSocial"> --}}
+                            {{-- <input type="text" name="raisonSocial" value="{{old('raisonSocial') ?? $client->raisonSocial }}"
+                                class="form-control" placeholder="raisonSocial"> --}}
+                            <input type="text" name="raisonSocial" value="{{Request::old('raisonSocial') ?? $client->raisonSocial }}"
                                 class="form-control" placeholder="raisonSocial">
                         </div>
+                        {{-- <div class="form-group">
+                            <strong>Slug:</strong>
+                            <input type="text" name="slug" value="{{ $client->slug }}" class="form-control"
+                                placeholder="slug">
+                        </div> --}}
                         <div class="form-group">
                             <strong>Adresse:</strong>
                             <input type="text" name="adresse" value="{{ $client->adresse }}" class="form-control"
@@ -74,10 +90,17 @@
                             <input type="text" name="email" value="{{ $client->email }}" class="form-control"
                                 placeholder="email">
                         </div>
+                        {{-- <div class="form-group">
+                            <strong>Password:</strong>
+                            <input type="text" name="password" value="{{ ($client->password) }}" class="form-control"
+                                placeholder="password">
+                        </div> --}}
                     </div>
-                    <a class="btn btn-success" href="{{ route('client.update', ['client' => $client]) }}">Update Client</a>
-                    {{-- <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+
                         <button type="submit" class="btn btn-primary">Submit</button>
+                    {{-- <a class="btn btn-success" href="{{ route('client.update', ['client' => $client]) }}">Update Client</a> --}}
+                </form>
+                    {{-- <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                     </div> --}}
                 </div>
 

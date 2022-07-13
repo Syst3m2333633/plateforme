@@ -1,6 +1,7 @@
 @extends('Layouts.layout')
 
 @section('content')
+
     <div class="row">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
@@ -16,13 +17,13 @@
         <div clas="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Raison social : </strong>
-                {{ $Clients->raisonSocial }}
+                {{-- {{ $Client->raisonSocial }} --}}
             </div>
         </div>
         <div clas="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Name : </strong>
-                {{ $Clients->name }}
+                {{-- {{ $Client->name }} --}}
             </div>
         </div>
 

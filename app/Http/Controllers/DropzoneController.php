@@ -28,14 +28,23 @@ class DropzoneController extends Controller
      */
     public function dropzoneStore(Request $request)
     {
-
-
         $clients = Client::all();
         $image = $request->file('file');
         $imageName = $image->getClientOriginalName();
         $image->move(storage_path('public/devis'), $imageName);
         return response()->json(['success' => $imageName]);
     }
+
+    public function droplogoStore(Request $request)
+    {
+        // $clients = Client::all();
+        $image = $request->file('avatar');
+        $imageName = $image->getClientOriginalName();
+        $image->move(storage_path('public.'. $request->raisonSocial .'logo'), $imageName);
+        return response()->json(['success' => $imageName]);
+    }
+
+
 
     /**
      * Image Upload Code

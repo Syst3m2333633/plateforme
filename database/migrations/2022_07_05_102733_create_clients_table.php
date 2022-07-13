@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -14,10 +15,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('clients', function (Blueprint $table) {
+
+
             $table->id();
             // $table->string('role')->default('user');
             $table->string('raisonSocial')->unique()->nullable();
-            $table->string('slug')->nullable();
+            $table->string('slug');
             $table->string('adresse')->nullable();
             $table->string('complAdresse')->nullable();
             $table->string('codePostal')->nullable();
@@ -28,12 +31,13 @@ return new class extends Migration
             $table->string('firstname')->nullable();
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('path');
+            $table->text('avatar');
             $table->string('CodeClimate')->nullable();
             $table->string('CodeCov')->nullable();
             $table->string('CodeMatomo')->nullable();
             $table->softDeletes();
             $table->timestamps();
+
         });
     }
 

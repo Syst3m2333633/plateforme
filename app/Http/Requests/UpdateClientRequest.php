@@ -36,7 +36,7 @@ class UpdateClientRequest extends FormRequest
             'name' => 'required',
             'firstname' => 'required',
             'email' => 'required',
-            'password' => 'required',
+            // 'password' => 'required',
         ];
     }
 }

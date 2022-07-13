@@ -14,9 +14,8 @@ class Client extends Model
     use SoftDeletes, HasFactory, Searchable;
 
     protected $fillable = [
-        'raisonSocial', 'slug', 'adresse', 'complAdresse', 'codePostal', 'ville', 'pays', 'telephone', 'name', 'firstname', 'email', 'password',
+        'raisonSocial', 'slug', 'adresse', 'complAdresse', 'codePostal', 'ville', 'pays', 'telephone', 'name', 'firstname', 'email', 'logo'
     ];
-
 
     public function sluggable()
     {
@@ -24,10 +23,10 @@ class Client extends Model
             'slug' => [
                 'source' => 'raisonSocial'
             ]
-            ];
+        ];
     }
 
-     /**
+    /**
      * The attributes that should be cast.
      *
      * @var array<string, string>
@@ -37,19 +36,39 @@ class Client extends Model
     ];
 
     /**
-     * Get the index name for the model.
+     * Get the value used to index the model.
      *
-     * @return string
+     * @return mixed
      */
-    public function searchableAs()
+    public function getScoutKey()
     {
-        return 'client.index';
+        return $this->raisonSocial;
+    }
+
+    /**
+     * Get the key name used to index the model.
+     *
+     * @return mixed
+     */
+    public function getScoutKeyName()
+    {
+        return 'raisonSocial';
     }
 
     public function getRouteKeyName()
-{
-    return 'slug';
-}
+    {
+        return 'slug';
+    }
 
+    public function getImageAttribute(): string
+    {
 
+        $image = storage_path($this->raisonSocial . '/logo/'. $this->avatar);
+
+        return file_exists($image)
+
+            ? $image
+
+            : storage_path($this->raisonSocial . 'default.jpg');
+    }
 }
