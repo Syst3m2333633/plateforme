@@ -20,9 +20,9 @@
                 </div>
             @endif
 
-                <form action="{{ route('client.update', ['client' => $client]) }}" method="POST">
+                {{-- <form action="{{ route('devis.update', ['devis' => $devi]) }}" method="POST">
                     @csrf
-                    @method('PUT')
+                    @method('PUT') --}}
 
                 <div class="row">
                     <div class="card my-10 bg-dark">
@@ -107,7 +107,7 @@
 
                         <button type="submit" class="btn btn-primary">Submit</button>
                     {{-- <a class="btn btn-success" href="{{ route('client.update', ['client' => $client]) }}">Update Client</a> --}}
-                </form>
+                {{-- </form> --}}
                     {{-- <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                     </div> --}}
                 </div>

@@ -20,6 +20,9 @@ class ClientFactory extends Factory
     {
         $raisonSocial = $this->faker->company();
         $slug = Str::slug($raisonSocial);
+        Storage::MakeDirectory($slug . '/logo');
+        Storage::MakeDirectory($slug . '/devis');
+        Storage::MakeDirectory($slug . '/factures');
 
         return [
             'raisonSocial' => $raisonSocial,
@@ -35,10 +38,9 @@ class ClientFactory extends Factory
             'firstname' => $this->faker->firstName(),
             'email' => $this->faker->email(),
             'password' => $this->faker->password(),
-            'avatar' => $this->faker->imageURL(640, 480),
-            // Storage::MakeDirectory($raisonSocial . '/logo'),
-            // Storage::MakeDirectory($raisonSocial . '/devis'),
-            // Storage::MakeDirectory($raisonSocial . '/factures'),
+            // 'avatar' => $this->faker->imageURL(640, 480),
+            'users_id' => $this->faker->numberBetween(1, 2),
+            // 'user_id' => $this->faker->13,
         ];
     }
 }

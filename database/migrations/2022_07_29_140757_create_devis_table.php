@@ -15,8 +15,10 @@ return new class extends Migration
     {
         Schema::create('devis', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('path');
+            $table->string('name')->nullable();
+            $table->string('size')->nullable();
+            $table->string('location')->nullable();
+            $table->foreignId('client_id')->constrained('clients');
             $table->timestamps();
         });
     }

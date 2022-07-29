@@ -32,9 +32,27 @@
 
 <body class="font-sans antialiased">
     <div class="py-12">
+        @include('layouts.navigation')
+        {{-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="{{ route('dashboard') }}">Accueil</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit">Se déconnecter</button>
+                    </form>
+                  {{-- <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a> --}}
+                {{-- </li>
 
 
-        <nav>
+              </ul>
+            </div> --}}
+          {{-- </nav>  --}}
+        {{-- <nav>
             <ul>
                 <li><a href="{{ route('dashboard') }}">Accueil</a></li>
                 <li><a></a></li>
@@ -43,7 +61,7 @@
                     <button type="submit">Se déconnecter</button>
                 </form>
             </ul>
-        </nav>
+        </nav> --}}
 
         {{-- @dump(session()->all()); --}}
         @if (session('success'))
@@ -55,6 +73,9 @@
         <div class="container">
             @yield('content')
         </div>
+
+
+
 </body>
 
 </html>

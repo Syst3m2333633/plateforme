@@ -11,6 +11,7 @@ use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Silber\Bouncer\Bouncer;
+// use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
@@ -28,6 +29,12 @@ class User extends Authenticatable
     public function facture()
     {
         return $this->belongsTo(Facture::class);
+    }
+
+    //Relation entre user et client
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
     }
 
     /**

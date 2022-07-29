@@ -1,7 +1,7 @@
 @extends('Layouts.layout')
 
 @section('content')
-
+{{-- {{$message}} --}}
 <div class="container">
     <div class="row card text-white bg-dark">
         <div>

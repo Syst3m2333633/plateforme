@@ -3,8 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Devis;
 use App\Models\Client;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
 
 class DevisController extends Controller
 {
@@ -15,7 +20,9 @@ class DevisController extends Controller
      */
     public function index()
     {
-        //
+        $clients = Client::paginate(15);
+        $devis = Devis::all();
+        return view('devis.index', compact('clients', 'devis'));
     }
 
     /**
@@ -25,9 +32,10 @@ class DevisController extends Controller
      */
     public function create()
     {
+        $devi = Devis::all();
         $users = User::all();
         $clients = Client::all();
-        return view('devis.create', compact('users', 'clients'));
+        return view('devis.create', compact('users', 'clients', 'devi'));
     }
 
     /**
@@ -38,18 +46,53 @@ class DevisController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'client_id' => 'required',
+        ]);
+        $document = $request->file('file');
+        $documentName = $document->getClientOriginalName();
+
+
+        // $document = $this->getRequest()->files->get('file')->getClientOriginalName();
+        $document->move(storage_path('app/' . $request->slug . '/devis', $documentName));
+
+        $insert = [
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+        ];
+        Devis::insertGetId($insert);
+
+        return Redirect::to('devis')->with('success', 'Devis Created Successfully !');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param \App\Models\Devis $devis
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        // $path = storage_path('app/' . $request->user . '/devis/phppwkwkW');
+        // return response()->download($path);
+
+        $devis = Devis::where('id', $request->devis)->first();
+        // $devis = Devis::findOrFail($devis);
+        return view('devis.show', compact('devis'));
+    }
+
+    public function downloadDevis(Request $request, $devis)
+    {
+        // dd($devis);
+        $client = Client::findOrFail($devis);
+        $devis = Devis::where('client_id', $devis)->first();
+        // dd($devis);
+        // $name = Devis::with('client_id', 'id');
+
+        // $path = storage_path('app/bechtelar-bernhard/devis/' . $request->deviName);// valide
+        $path = storage_path('app/' . $client->slug . '/devis/' . $devis->name);
+
+        return response()->download($path);
     }
 
     /**

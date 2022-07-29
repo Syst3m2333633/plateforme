@@ -31,8 +31,7 @@
                     <button type="submit" class="btn btn-secondary">Envoyer !</button>
                 {{-- </form> --}}
 
-                    <input type="file" class="dropzone form-control @error('file') is-invalid @enderror" name="file" id="file"
-                            placeholder="vos fichier>">{{ old( 'file') }}/>
+                    <input type="file" class="dropzone form-control @error('file') is-invalid @enderror" name="file" id="file">
                     {{-- <div>
                         <h3>Ajout d'une ou de plusieurs pièces jointes</h3>
                     </div> --}}

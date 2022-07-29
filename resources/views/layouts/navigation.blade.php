@@ -1,4 +1,6 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+    {{-- Resource --}}
+    <p style="display:none;">{{$client = App\Models\Client::all()}}</p>
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -12,8 +14,22 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                    {{-- <x-nav-link :href="route('devis.create')" :active="request()->routeIs('devis.create')">
+                        {{ __('Devis & factures') }}
+                    </x-nav-link> --}}
+                    <x-nav-link :href="route('event.create')" :active="request()->routeIs('event.create')">
+                        {{ __('Evènement') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('devis.index')" :active="request()->routeIs('devis.index')">
+                        {{ __('Devis') }}
+                    </x-nav-link>
+                    @if (auth()->user()->isAn('admin'))
+                    <x-nav-link :href="route('client.index')" :active="request()->routeIs('client.index')">
+                        {{ __('index clients') }}
+                    </x-nav-link>
+                    @endif
+                    <x-nav-link :href="route('client.profil', ['client' => auth()->user()->id])" :active="request()->routeIs('client.profil')">
+                        {{ __('profil client') }}
                     </x-nav-link>
                 </div>
             </div>

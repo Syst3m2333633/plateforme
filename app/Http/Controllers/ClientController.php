@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Bouncer;
+use App\Models\User;
 use App\Models\Client;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
@@ -23,9 +25,24 @@ class ClientController extends Controller
      */
     public function index()
     {
-
         $clients = Client::paginate(15);
+        $user = Auth::user();
+
+        // if (Bouncer::is($user)->notAn('admin'))
+        // {
+        //     Bouncer::forbid('client')->to('view', 'client.index');
+        // }
+        // Bouncer::allow('admin')->to('edit', $clients);
+
+        if ($user = 'is_admin') {
         return view('client.index', compact('clients'));
+        }
+    }
+
+    public function profil()
+    {
+        $clients = Client::where('users_id', 'LIKE', Auth()->user()->id)->first();
+        return view('client.profil', compact('client'));
     }
 
     public function search(Request $request)
@@ -83,7 +100,7 @@ class ClientController extends Controller
         ]);
         $logo = $request->file('avatar');
         $logoName = $logo->getClientOriginalName();
-        $logo->move(storage_path('app/' . $request->raisonSocial . '/logo'), $logoName);
+        $logo->move(storage_path('app/' . Str::slug($request->raisonSocial) . '/logo'), $logoName);
 
         $insert = [
             'raisonSocial' => $request->raisonSocial,
@@ -99,20 +116,29 @@ class ClientController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'avatar' => $request->avatar->getClientOriginalName(),
+            'users_id' => Auth::user()->id
         ];
 
         Client::insertGetId($insert);
 
-        return Redirect::to('client')
-       ->with('success','Greate! posts created successfully.');
+        $user = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ];
+
+        User::insertGetId($user);
+
+    //     return Redirect::to('client')
+    //    ->with('success','Client created successfully.');
 
        //Creation de stockage individuel
-        Storage::MakeDirectory($request->raisonSocial . '/logo');
-        Storage::MakeDirectory($request->raisonSocial . '/devis');
-        Storage::MakeDirectory($request->raisonSocial . '/factures');
+        Storage::MakeDirectory(Str::slug($request->raisonSocial) . '/logo');
+        Storage::MakeDirectory(Str::slug($request->raisonSocial) . '/devis');
+        Storage::MakeDirectory(Str::slug($request->raisonSocial) . '/factures');
 
         return Redirect::to('client')
-        ->with('success', 'Greate ! Client created successfully.');
+        ->with('success', 'Greate ! Client Created Successfully.');
 
     }
 
@@ -153,17 +179,8 @@ class ClientController extends Controller
      */
     public function update(UpdateClientRequest $request, Client $client)
     {
-        // $rS = 'raisonSocial';
-        // $data = $request->input();
-        // $slug = Str::slug($client->raisonSocial);
         $request->validate([
             'raisonSocial' => 'required',
-            // $data ['slug'] = str_replace(' ', '-', strtolower($data['raisonSocial'])),
-            // 'slug' => Str::slug($request->raisonSocial), //====== 'slug' => str::slug($data['raisonSocial']),
-            // 'slug' => Str::slug('raisonSocial'),
-            // 'slug' => 'required',
-            // 'slug' => $slug,
-            'slug' => Str::slug($request->raisonSocial),
             'adresse' => 'required',
             'complAdresse' => 'required',
             'codePostal' => 'required',
@@ -175,10 +192,19 @@ class ClientController extends Controller
             'email' => 'required',
         ]);
 
-        $client->update($request->all());
+
+
+        $client->update($request->all(),
+        [
+            $client->update(['slug' => Str::slug($request->raisonSocial)])
+        ]);
+
+            // $logo = $request->file('avatar');
+            // $logoName = $logo->getClientOriginalName();
+            // $logo->move(storage_path('app/' . $request->raisonSocial . '/logo'), $logoName);
 
             return redirect()->route('client.index')
-                ->with('success', 'Client updated Succssfully');
+                ->with('success', 'Client Updated Successfully');
     }
 
     /**
@@ -192,10 +218,10 @@ class ClientController extends Controller
         $client->delete();
 
         return redirect()->route('client.index')
-            ->with('success', 'Client deleted successfully');
+            ->with('success', 'Client Deleted Successfully');
     }
 
-     /**
+    /**
      * Restore the specified resource from storage.
      *
      * @param  \App\Models\Client  $client
@@ -208,7 +234,7 @@ class ClientController extends Controller
         if ($toto != Null && $toto )
         {
         return redirect()->route('client.index')
-            ->with('success', 'Client restored successfully');
+            ->with('success', 'Client Restored Successfully');
         }else {
             return redirect()->route('client.index')
             ->with('error', 'Client not restored');

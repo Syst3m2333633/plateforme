@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Client;
+use App\Models\Devis;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-class ClientSeeder extends Seeder
+class DevisSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,8 +15,6 @@ class ClientSeeder extends Seeder
      */
     public function run()
     {
-
-        Client::factory()->count(50)->create();
-
+        Devis::factory()->count(50)->create();
     }
 }

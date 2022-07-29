@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Schema\Blueprint;
@@ -15,12 +16,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('clients', function (Blueprint $table) {
-
-
             $table->id();
-            // $table->string('role')->default('user');
+            //Main elements
             $table->string('raisonSocial')->unique()->nullable();
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->string('adresse')->nullable();
             $table->string('complAdresse')->nullable();
             $table->string('codePostal')->nullable();
@@ -31,14 +30,21 @@ return new class extends Migration
             $table->string('firstname')->nullable();
             $table->string('email')->unique();
             $table->string('password');
+
+            //Logo
             $table->text('avatar');
+            //Token
             $table->string('CodeClimate')->nullable();
             $table->string('CodeCov')->nullable();
             $table->string('CodeMatomo')->nullable();
+            //Foreign Key
+            $table->foreignId('users_id')->constrained();
+            //Other
             $table->softDeletes();
             $table->timestamps();
 
         });
+
     }
 
     /**
@@ -48,6 +54,10 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('clients', function (Blueprint $table) {
+            $table->dropForeign(['users_id']);
+            $table->dropColumn('users_id');
+        });
         Schema::dropIfExists('clients');
     }
 };

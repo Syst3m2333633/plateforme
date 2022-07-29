@@ -21,8 +21,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        // $classified = view('client.index');
         \Bouncer::allow('admin')->toManage(Client::class);
         \Bouncer::allow('admin')->toManage(User::class);
+        // \Bouncer::allow('admin')->to('view', $classified);
         //\Bouncer::allow('admin')->to('update', \App\Models\User::class);
 
         $admin = \App\Models\User::factory()->create([
@@ -41,6 +43,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             ClientSeeder::class,
+            DevisSeeder::class,
         ]);
     }
 }

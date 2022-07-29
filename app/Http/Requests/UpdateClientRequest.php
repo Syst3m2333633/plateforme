@@ -27,6 +27,7 @@ class UpdateClientRequest extends FormRequest
     {
         return [
             'raisonSocial' => 'required',
+            // 'slug' => 'required',
             'adresse' => 'required',
             'complAdresse' => 'required',
             'codePostal' => 'required',

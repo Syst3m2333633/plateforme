@@ -2,28 +2,53 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Laravel\Scout\Attributes\SearchUsingPrefix;
+use Cviebrock\EloquentSluggable\SluggableObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Client extends Model
 {
     use SoftDeletes, HasFactory, Searchable;
 
+    //Relation entre client et user
+    public function user()
+    {
+        return $this->hasMany(Client::class);
+    }
+
+    //Relation entre client et devis
+    public function devis()
+    {
+        return $this->hasMany(Devis::class);
+    }
+
     protected $fillable = [
-        'raisonSocial', 'slug', 'adresse', 'complAdresse', 'codePostal', 'ville', 'pays', 'telephone', 'name', 'firstname', 'email', 'logo'
+        'raisonSocial', 'slug', 'adresse', 'complAdresse', 'codePostal', 'ville', 'pays', 'telephone', 'name', 'firstname', 'email', 'logo', 'user_id'
     ];
 
-    public function sluggable()
+    public function sluggable(): array
     {
         return [
             'slug' => [
                 'source' => 'raisonSocial'
             ]
         ];
+    }
+
+    public function sluggableEvent(): string
+    {
+        /**
+         * Default behaviour -- generate slug before model is saved.
+         */
+        return SluggableObserver::SAVING;
+
+        /**
+         * Optional behaviour -- generate slug after model is saved.
+         * This will likely become the new default in the next major release.
+         */
+        // return SluggableObserver::SAVED;
     }
 
     /**
@@ -63,7 +88,7 @@ class Client extends Model
     public function getImageAttribute(): string
     {
 
-        $image = storage_path($this->raisonSocial . '/logo/'. $this->avatar);
+        $image = storage_path($this->raisonSocial . '/logo/' . $this->avatar);
 
         return file_exists($image)
 
