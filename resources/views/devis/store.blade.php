@@ -15,11 +15,7 @@
                 <form action="{{ route('dropzone.store'{{--, ['id' => $users->id]--}}) }}" method="post"
                     enctype="multipart/form-data" id="image-upload" class="dropzone">
                     @csrf
-                    {{-- <select name="user" id="user">
-                        @foreach ($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }}</option>
-                        @endforeach
-                    </select> --}}
+
                     <div>
                         <h3>Ajout de plusieurs devis en cliquant ou en déposant sur la fenêtre</h3>
                     </div>

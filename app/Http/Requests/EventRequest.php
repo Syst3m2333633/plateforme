@@ -13,7 +13,7 @@ class EventRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,7 +25,7 @@ class EventRequest extends FormRequest
     {
         return [
             //bail on arrête de vérifier dès qu'une règle n'est pas respectée
-            'titre' =>'bail|required|between:5,50|alpha',
+            'titre' =>'bail|required|between:5,50',
             'message' =>'bail|required|max:250',
 
         ];

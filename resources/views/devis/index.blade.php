@@ -27,11 +27,11 @@
                                 <td>
                                     @foreach ($devis as $devi)
                                         @if ($client->id == $devi->client_id)
-                                            {{ $devi->name }}
+
                                             <form>
                                                 @csrf
                                                 {{-- ligne fonctionnelle --}}
-                                                <a href="{{ route('devis.download', ['devi' => $devi->client_id])}}" class="btn"><img src="{{ asset('images/bootstrap.svg')}}" style="background-color:green;" with="10" alt="download"/></a>
+                                                {{ $devi->name }}<a href="{{ route('devis.download', ['devi' => $devi->client_id])}}" class="btn"><img src="{{ asset('images/bootstrap.svg')}}" style="background-color:green;" with="10" alt="download"/></a>
                                                 {{--  --}}
                                                 {{-- <a href="{{ route('devis.download', ['devis' => $devi->client_id])}}" class="btn"><img src="{{ asset('images/bootstrap.svg')}}" style="background-color:green;" with="10" alt="download"/></a> --}}
                                             </form>

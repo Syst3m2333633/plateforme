@@ -7,8 +7,6 @@ use App\Models\Devis;
 use App\Models\Client;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 
 class DevisController extends Controller
@@ -47,22 +45,21 @@ class DevisController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'client_id' => 'required',
+            'client' => 'required',
         ]);
         $document = $request->file('file');
         $documentName = $document->getClientOriginalName();
+        $client = Client::where('id', $request->client)->first();
+        $document->move(storage_path('app/' . $client->slug . '/devis'), $documentName);
 
+        $devis = new Devis();
+        $devis->name = $documentName;
+        $devis->client_id = $request->client;
 
-        // $document = $this->getRequest()->files->get('file')->getClientOriginalName();
-        $document->move(storage_path('app/' . $request->slug . '/devis', $documentName));
+        $devis->save();
 
-        $insert = [
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-        ];
-        Devis::insertGetId($insert);
-
-        return Redirect::to('devis')->with('success', 'Devis Created Successfully !');
+        return Redirect::to('devis')
+        ->with('success', 'Greate ! devis added successfully.');
     }
 
     /**

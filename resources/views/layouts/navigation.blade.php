@@ -17,20 +17,33 @@
                     {{-- <x-nav-link :href="route('devis.create')" :active="request()->routeIs('devis.create')">
                         {{ __('Devis & factures') }}
                     </x-nav-link> --}}
+                    {{-- <x-nav-link :href="route('event.create')" :active="request()->routeIs('event.create')">
+                        {{ __('Evènement') }}
+                    </x-nav-link> --}}
+                    @if(auth()->user()->isNotAn('admin'))
+
                     <x-nav-link :href="route('event.create')" :active="request()->routeIs('event.create')">
                         {{ __('Evènement') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('devis.index')" :active="request()->routeIs('devis.index')">
-                        {{ __('Devis') }}
-                    </x-nav-link>
-                    @if (auth()->user()->isAn('admin'))
-                    <x-nav-link :href="route('client.index')" :active="request()->routeIs('client.index')">
-                        {{ __('index clients') }}
-                    </x-nav-link>
-                    @endif
                     <x-nav-link :href="route('client.profil', ['client' => auth()->user()->id])" :active="request()->routeIs('client.profil')">
                         {{ __('profil client') }}
                     </x-nav-link>
+                    @endif
+                    @if (auth()->user()->isAn('admin'))
+                    <x-nav-link :href="route('devis.index')" :active="request()->routeIs('devis.index')">
+                        {{ __('Devis') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('facture.index')" :active="request()->routeIs('facture.index')">
+                        {{ __('factures') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('event.index')" :active="request()->routeIs('event.index')">
+                        {{ __('Evènement') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('client.index')" :active="request()->routeIs('client.index')">
+                        {{ __('clients') }}
+                    </x-nav-link>
+                    @endif
+
                 </div>
             </div>
 

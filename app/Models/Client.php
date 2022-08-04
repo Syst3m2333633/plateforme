@@ -24,6 +24,12 @@ class Client extends Model
         return $this->hasMany(Devis::class);
     }
 
+    //Relation entre client et event
+    public function event()
+    {
+        return $this->hasMany(Devis::class);
+    }
+
     protected $fillable = [
         'raisonSocial', 'slug', 'adresse', 'complAdresse', 'codePostal', 'ville', 'pays', 'telephone', 'name', 'firstname', 'email', 'logo', 'user_id'
     ];

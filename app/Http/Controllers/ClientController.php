@@ -28,29 +28,23 @@ class ClientController extends Controller
         $clients = Client::paginate(15);
         $user = Auth::user();
 
-        // if (Bouncer::is($user)->notAn('admin'))
-        // {
-        //     Bouncer::forbid('client')->to('view', 'client.index');
-        // }
-        // Bouncer::allow('admin')->to('edit', $clients);
-
         if ($user = 'is_admin') {
-        return view('client.index', compact('clients'));
+            return view('client.index', compact('clients'));
         }
     }
 
     public function profil()
     {
-        $clients = Client::where('users_id', 'LIKE', Auth()->user()->id)->first();
+        $client = Client::where('user_id', 'LIKE', Auth()->user()->id)->first();
         return view('client.profil', compact('client'));
     }
 
     public function search(Request $request)
     {
         $search_text = $_GET['searchClient'];
-        $clients = Client::where('raisonSocial', 'LIKE', '%' . $search_text. '%')
-                        ->orWhere('name', 'LIKE', '%' . $search_text. '%')
-                        ->get();
+        $clients = Client::where('raisonSocial', 'LIKE', '%' . $search_text . '%')
+            ->orWhere('name', 'LIKE', '%' . $search_text . '%')
+            ->get();
 
         return view('client.search', compact('clients'));
     }
@@ -116,7 +110,7 @@ class ClientController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'avatar' => $request->avatar->getClientOriginalName(),
-            'users_id' => Auth::user()->id
+            'user_id' => Auth::user()->id,
         ];
 
         Client::insertGetId($insert);
@@ -129,23 +123,23 @@ class ClientController extends Controller
 
         User::insertGetId($user);
 
-    //     return Redirect::to('client')
-    //    ->with('success','Client created successfully.');
+        //     return Redirect::to('client')
+        //    ->with('success','Client created successfully.');
 
-       //Creation de stockage individuel
+        //Creation de stockage individuel
         Storage::MakeDirectory(Str::slug($request->raisonSocial) . '/logo');
         Storage::MakeDirectory(Str::slug($request->raisonSocial) . '/devis');
         Storage::MakeDirectory(Str::slug($request->raisonSocial) . '/factures');
+        Storage::MakeDirectory(Str::slug($request->raisonSocial) . '/event');
 
         return Redirect::to('client')
-        ->with('success', 'Greate ! Client Created Successfully.');
-
+            ->with('success', 'Greate ! Client Created Successfully.');
     }
 
     public function image(Client $client)
     {
         $image = Image::make($client->image);
-            return $image->response();
+        return $image->response();
     }
 
     /**
@@ -194,17 +188,19 @@ class ClientController extends Controller
 
 
 
-        $client->update($request->all(),
-        [
-            $client->update(['slug' => Str::slug($request->raisonSocial)])
-        ]);
+        $client->update(
+            $request->all(),
+            [
+                $client->update(['slug' => Str::slug($request->raisonSocial)])
+            ]
+        );
 
-            // $logo = $request->file('avatar');
-            // $logoName = $logo->getClientOriginalName();
-            // $logo->move(storage_path('app/' . $request->raisonSocial . '/logo'), $logoName);
+        // $logo = $request->file('avatar');
+        // $logoName = $logo->getClientOriginalName();
+        // $logo->move(storage_path('app/' . $request->raisonSocial . '/logo'), $logoName);
 
-            return redirect()->route('client.index')
-                ->with('success', 'Client Updated Successfully');
+        return redirect()->route('client.index')
+            ->with('success', 'Client Updated Successfully');
     }
 
     /**
@@ -231,13 +227,12 @@ class ClientController extends Controller
     {
         $toto = $client->restore();
 
-        if ($toto != Null && $toto )
-        {
-        return redirect()->route('client.index')
-            ->with('success', 'Client Restored Successfully');
-        }else {
+        if ($toto != Null && $toto) {
             return redirect()->route('client.index')
-            ->with('error', 'Client not restored');
-         }
+                ->with('success', 'Client Restored Successfully');
+        } else {
+            return redirect()->route('client.index')
+                ->with('error', 'Client not restored');
+        }
     }
 }

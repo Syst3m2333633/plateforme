@@ -3,61 +3,57 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ClientControllerTest extends TestCase
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
 
-    public function test_avatars_can_be_uploaded()
+    public function test_Admin_Can_See_Index_Client()
     {
-        $user = \App\Models\User::factory()->create();
-        Storage::makeDirectory(Str::slug($user->name) . '/logo');
-        $file = UploadedFile::fake()->image('avatar.jpg');
-
-            $response = $this->actingAs($user)->json('POST', 'client.store', [
-                'avatar' => $file
-            ])->assertStatus(200);
-            // Assert the file was stored...
-
-        Storage::storage_path($user->name . '/logo')->assertExists($file->hashName());
-        // $data = Client::factory()->make()->getAttributes();
-        // $response = $this->actingAs($user)->post(route('client.store'), $data);
-        // $response->assertStatus(200);
+        $admin = User::factory()->create(['is_admin' => 1]);
+        $response = $this->actingAs($admin)->get(route('client.index'));
+        $response->assertViewIs('client.index');
     }
 
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function test_Admin_Can_See_Client_Create()
+    {
+        $admin = User::factory()->create(['is_admin' => 1]);
+        $response = $this->actingAs($admin)->get(route('client.create'));
+        $response->assertViewIs('client.create');
+    }
 
-    // /**
-    //  * A basic feature test example.
-    //  *
-    //  * @return void
-    //  */
-    // public function test_Store_Client()
-    // {
-    //     Storage::fake('avatars');
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function test_Admin_Can_See_Client_Profil()
+    {
+        $admin = User::factory()->create(['is_admin' => 1]);
+        $response = $this->actingAs($admin)->get(route('client.profil'));
+        $response->assertViewIs('client.profil');
+    }
 
-    //     $file = UploadedFile::fake()->image('avatar.jpg');
-
-    //     $response = $this->post('local', [
-    //         'avatar' => $file,
-    //     ]);
-    //     Storage::disk('local')->assertExists($file->hashName());
-
-    //     // $user = User::factory()->create();
-    //     // $data = Client::factory()->make()->getAttributes();
-    //     // $response = $this->actingAs($user)->post(route('client.store'), $data);
-    //     $response->assertStatus(200);
-    // }
-
-    // public function test_Store_Client()
-    // {
-    //     $user = Client::factory()->create();
-    //     $data = Client::factory()->make()->getAttributes();
-    //     $response = $this->actingAs($user)->get(route('client.store'), $data);
-    //     $response->assertStatus(200);
-    // }
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function test_Admin_Can_See_Client_Trash()
+    {
+        $admin = User::factory()->create(['is_admin' => 1]);
+        $response = $this->actingAs($admin)->get(route('client.trash'));
+        $response->assertViewIs('client.trash');
+    }
 }

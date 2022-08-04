@@ -38,7 +38,7 @@ return new class extends Migration
             $table->string('CodeCov')->nullable();
             $table->string('CodeMatomo')->nullable();
             //Foreign Key
-            $table->foreignId('users_id')->constrained();
+            $table->foreignIdFor(User::class)->constrained();
             //Other
             $table->softDeletes();
             $table->timestamps();
@@ -55,8 +55,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('clients', function (Blueprint $table) {
-            $table->dropForeign(['users_id']);
-            $table->dropColumn('users_id');
+            $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
         });
         Schema::dropIfExists('clients');
     }

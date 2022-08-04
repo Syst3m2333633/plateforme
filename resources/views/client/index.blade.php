@@ -29,14 +29,14 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>raison social</th>
+                            <th style="text-align:center;">raison social</th>
                             {{-- <th>slug</th> --}}
-                            <th>email</th>
-                            <th>téléphone</th>
-                            <th>nom du responsable / contact</th>
-                            <th>prénom du responsable / contact</th>
+                            <th style="text-align:center;">email</th>
+                            <th style="text-align:center;">téléphone</th>
+                            <th style="text-align:center;">nom du responsable / contact</th>
+                            <th style="text-align:center;">prénom du responsable / contact</th>
 
-                            <th>actions</th>
+                            <th style="text-align:center;">actions</th>
 
                         </tr>
                     </thead>
@@ -45,11 +45,11 @@
                             <tr>
                                 <td>{{ $client->raisonSocial }}</td>
                                 {{-- <td>{{ $client->slug }}</td> --}}
-                                <td><a href="mailto:{{ $client->email }}">{{ $client->email }}</a></td>
-                                <td><a href="tel:{{ $client->telephone }}">{{ $client->telephone }}</a></td>
+                                <td style="text-align:center;"><a href="mailto:{{ $client->email }}">{{ $client->email }}</a></td>
+                                <td style="text-align:center;"><a href="tel:{{ $client->telephone }}">{{ $client->telephone }}</a></td>
                                 <td style="text-align:center;">{{ $client->name }}</td>
                                 <td style="text-align:center;">{{ $client->firstname }}</td>
-                                <td style="background:white">
+                                <td style="background:bg-dark">
                                     <form action="{{ route('client.destroy', ['client' => $client]) }}" method="POST">
                                         <a class="btn btn-primary"
                                             href="{{ route('client.edit', ['client' => Str::slug($client->raisonSocial)]) }}">Editer</a>

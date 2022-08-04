@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\EventRequest;
+use App\Models\User;
 use App\Models\Event;
+use App\Models\Client;
 use Illuminate\Http\Request;
+use App\Http\Requests\EventRequest;
+use Illuminate\Support\Facades\Redirect;
 
 class EventController extends Controller
 {
@@ -15,7 +18,24 @@ class EventController extends Controller
      */
     public function index()
     {
-        //
+        $clients = Client::paginate(15);
+        $events = Event::all();
+        return view('event.index', compact('events', 'clients'));
+    }
+
+    public function downloadEvent(Request $request, $events)
+    {
+        // dd($devis);
+        // dd($events);
+        $client = Client::findOrFail($events);
+        $event = Event::where('client_id', $events)->first();
+        // dd($devis);
+        // $name = Devis::with('client_id', 'id');
+
+        // $path = storage_path('app/bechtelar-bernhard/devis/' . $request->deviName);// valide
+        $path = storage_path('public/event/' . $event->name);
+
+        return response()->download($path);
     }
 
     /**
@@ -25,8 +45,10 @@ class EventController extends Controller
      */
     public function create()
     {
-        // $event = Event::all();
-        return view('event.create');
+        $clients = Client::all();
+        $events = Event::all();
+        $users = User::all();
+        return view('event.create', compact('clients', 'events', 'users'));
     }
 
     /**
@@ -35,15 +57,51 @@ class EventController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(EventRequest $request)
+    public function store(EventRequest $request/*, $event*/)
     {
+        $request->validate([
+            'client' => 'required',
+            'titre' => 'required',
+            'message' => 'required',
+            'file' => 'required',
+        ]);
+        $document = $request->file('file');
+        $documentName = $document->getClientOriginalName();
+        $client = Client::where('id', $request->client)->first();
+        $document->move(storage_path('app/' . $client->slug . '/event'), $documentName);
 
         $event = new Event();
         $event->titre = $request->titre;
         $event->message = $request->message;
+        $event->client_id = $request->client;
 
         $event->save();
-        return view('confirm');//event.create
+
+        return Redirect::to('event')
+        ->with('success', 'Greate ! event added successfully.');
+
+
+        // $insert = [
+        //     'titre' => $request->titre,
+        //     'message' => $request->message,
+        //     'path' => $document,
+        //     'client_id' => $event->client_id,
+        // ];
+        // Event::insertGetId($insert);
+
+
+        // $event = new Event();
+        // $event->titre = $request->titre;
+        // $event->message = $request->message;
+        // $event->path = $document;
+
+        // Event::insetGetId($insert);
+
+
+        // $event->save();
+        // return view('client');//event.create
+
+
         // return view('confirm');
     }
 
