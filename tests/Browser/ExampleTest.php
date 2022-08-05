@@ -21,7 +21,6 @@ class ExampleTest extends DuskTestCase
             $browser->visit('/dashboard')
                     ->clickLink('devis.index')
                     ->assertPathIs('devis.index');
-
         });
     }
 }

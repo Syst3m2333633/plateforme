@@ -24,7 +24,7 @@ class StoreDevisRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+
         ];
     }
 }

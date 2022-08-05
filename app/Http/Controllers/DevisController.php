@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Devis;
 use App\Models\Client;
-use Illuminate\Support\Str;
+use App\Models\Devis;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -20,6 +19,7 @@ class DevisController extends Controller
     {
         $clients = Client::paginate(15);
         $devis = Devis::all();
+
         return view('devis.index', compact('clients', 'devis'));
     }
 
@@ -33,6 +33,7 @@ class DevisController extends Controller
         $devi = Devis::all();
         $users = User::all();
         $clients = Client::all();
+
         return view('devis.create', compact('users', 'clients', 'devi'));
     }
 
@@ -40,6 +41,7 @@ class DevisController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -50,7 +52,7 @@ class DevisController extends Controller
         $document = $request->file('file');
         $documentName = $document->getClientOriginalName();
         $client = Client::where('id', $request->client)->first();
-        $document->move(storage_path('app/' . $client->slug . '/devis'), $documentName);
+        $document->move(storage_path('app/'.$client->slug.'/devis'), $documentName);
 
         $devis = new Devis();
         $devis->name = $documentName;
@@ -59,13 +61,14 @@ class DevisController extends Controller
         $devis->save();
 
         return Redirect::to('devis')
-        ->with('success', 'Greate ! devis added successfully.');
+            ->with('success', 'Greate ! devis added successfully.');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\Devis $devis
+     * @param  \App\Models\Devis  $devis
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request)
@@ -87,7 +90,7 @@ class DevisController extends Controller
         // $name = Devis::with('client_id', 'id');
 
         // $path = storage_path('app/bechtelar-bernhard/devis/' . $request->deviName);// valide
-        $path = storage_path('app/' . $client->slug . '/devis/' . $devis->name);
+        $path = storage_path('app/'.$client->slug.'/devis/'.$devis->name);
 
         return response()->download($path);
     }
@@ -96,11 +99,11 @@ class DevisController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        //
     }
 
     /**
@@ -108,21 +111,21 @@ class DevisController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
     }
 }

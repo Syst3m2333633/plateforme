@@ -2,15 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Devis;
-use App\Models\Event;
 use App\Models\Client;
-use App\Models\Facture;
-use Illuminate\Support\Str;
+use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-use Symfony\Component\Console\Input\Input;
 
 class DropzoneController extends Controller
 {
@@ -54,11 +49,10 @@ class DropzoneController extends Controller
         // $clients = Client::all();
         $image = $request->file('avatar');
         $imageName = $image->getClientOriginalName();
-        $image->move(storage_path('app/.'. $request->raisonSocial .'/logo'), $imageName);
+        $image->move(storage_path('app/.'.$request->raisonSocial.'/logo'), $imageName);
+
         return response()->json(['success' => $imageName]);
     }
-
-
 
     // /**
     //  * Image Upload Code
@@ -102,7 +96,7 @@ class DropzoneController extends Controller
         $documentName = $document->getClientOriginalName();
         $client = Client::where('id', $request->client)->first();
         dd($client);
-        $document->move(storage_path('app/' . $client->slug . '/event'), $documentName);
+        $document->move(storage_path('app/'.$client->slug.'/event'), $documentName);
         $event = new Event();
         $event->name = $documentName;
         $event->client_id = $request->client;
@@ -110,7 +104,7 @@ class DropzoneController extends Controller
         $event->save();
 
         return Redirect::to('event')
-        ->with('success', 'Greate ! Ev3nt Added Successfully.');
+            ->with('success', 'Greate ! Ev3nt Added Successfully.');
         // $client = Client::finOrFail($event);
         // $request->validate([
         //     'titre' => 'required',

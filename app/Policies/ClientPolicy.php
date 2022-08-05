@@ -14,11 +14,11 @@ class ClientPolicy
      * Determine whether the user can view any models.
      *
      * @param  \App\Models\User  $user
+     *
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function viewAny(User $user)
     {
-        //
     }
 
     /**
@@ -26,22 +26,22 @@ class ClientPolicy
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\Client  $client
+     *
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function view(User $user, Client $client)
     {
-        //
     }
 
     /**
      * Determine whether the user can create models.
      *
      * @param  \App\Models\User  $user
+     *
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function create(User $user)
     {
-        //
     }
 
     /**
@@ -49,6 +49,7 @@ class ClientPolicy
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\Client  $client
+     *
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function update(User $user, Client $client)
@@ -61,11 +62,11 @@ class ClientPolicy
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\Client  $client
+     *
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function delete(User $user, Client $client)
     {
-        //
     }
 
     /**
@@ -73,11 +74,11 @@ class ClientPolicy
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\Client  $client
+     *
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function restore(User $user, Client $client)
     {
-        //
     }
 
     /**
@@ -85,10 +86,10 @@ class ClientPolicy
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\Client  $client
+     *
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function forceDelete(User $user, Client $client)
     {
-        //
     }
 }

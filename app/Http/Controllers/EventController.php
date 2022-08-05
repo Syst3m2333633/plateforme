@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Event;
-use App\Models\Client;
-use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
+use App\Models\Client;
+use App\Models\Event;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
 class EventController extends Controller
@@ -20,6 +20,7 @@ class EventController extends Controller
     {
         $clients = Client::paginate(15);
         $events = Event::all();
+
         return view('event.index', compact('events', 'clients'));
     }
 
@@ -33,7 +34,7 @@ class EventController extends Controller
         // $name = Devis::with('client_id', 'id');
 
         // $path = storage_path('app/bechtelar-bernhard/devis/' . $request->deviName);// valide
-        $path = storage_path('public/event/' . $event->name);
+        $path = storage_path('public/event/'.$event->name);
 
         return response()->download($path);
     }
@@ -48,6 +49,7 @@ class EventController extends Controller
         $clients = Client::all();
         $events = Event::all();
         $users = User::all();
+
         return view('event.create', compact('clients', 'events', 'users'));
     }
 
@@ -55,6 +57,7 @@ class EventController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(EventRequest $request/*, $event*/)
@@ -68,7 +71,7 @@ class EventController extends Controller
         $document = $request->file('file');
         $documentName = $document->getClientOriginalName();
         $client = Client::where('id', $request->client)->first();
-        $document->move(storage_path('app/' . $client->slug . '/event'), $documentName);
+        $document->move(storage_path('app/'.$client->slug.'/event'), $documentName);
 
         $event = new Event();
         $event->titre = $request->titre;
@@ -78,8 +81,7 @@ class EventController extends Controller
         $event->save();
 
         return Redirect::to('event')
-        ->with('success', 'Greate ! event added successfully.');
-
+            ->with('success', 'Greate ! event added successfully.');
 
         // $insert = [
         //     'titre' => $request->titre,
@@ -89,7 +91,6 @@ class EventController extends Controller
         // ];
         // Event::insertGetId($insert);
 
-
         // $event = new Event();
         // $event->titre = $request->titre;
         // $event->message = $request->message;
@@ -97,10 +98,8 @@ class EventController extends Controller
 
         // Event::insetGetId($insert);
 
-
         // $event->save();
         // return view('client');//event.create
-
 
         // return view('confirm');
     }
@@ -109,22 +108,22 @@ class EventController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        //
     }
 
     /**
@@ -132,21 +131,21 @@ class EventController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
     }
 }

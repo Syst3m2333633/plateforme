@@ -2,17 +2,14 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Order;
 use App\Models\Client;
-use Illuminate\Support\Str;
-use Illuminate\Http\UploadedFile;
-// use Illuminate\Foundation\Auth\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Hash;
+// use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Str;
+use Tests\TestCase;
 
 class ClientCRUDTest extends TestCase
 {
@@ -47,24 +44,24 @@ class ClientCRUDTest extends TestCase
         $slug = Str::slug($raisonSocial);
         $file = UploadedFile::fake()->image('avatar.jpg');
         $user = User::create([
-           'name' => 'testUser',
-           'email' => 'email.test@lol.fr',
-           'password' => Hash::make('wiklog1234'),
+            'name' => 'testUser',
+            'email' => 'email.test@lol.fr',
+            'password' => Hash::make('wiklog1234'),
         ]);
 
         $client = Client::create([
-        'raisonSocial' => $raisonSocial,
-        'slug' => $slug,
-        'adresse' => '6 rue du gorge bleu',
-        'complAdresse' => '3eme bureau à gauche',
-        'codePostal' => '44350',
-        'ville' => 'Guérande',
-        'pays' => 'France',
-        'telephone' => '0612555754',
-        'name' => 'Hervy',
-        'firstname' => 'Stéphane',
-        'email' => 'stephane.hervy@wiklog.fr',
-        'user_id' => $user->id,
+            'raisonSocial' => $raisonSocial,
+            'slug' => $slug,
+            'adresse' => '6 rue du gorge bleu',
+            'complAdresse' => '3eme bureau à gauche',
+            'codePostal' => '44350',
+            'ville' => 'Guérande',
+            'pays' => 'France',
+            'telephone' => '0612555754',
+            'name' => 'Hervy',
+            'firstname' => 'Stéphane',
+            'email' => 'stephane.hervy@wiklog.fr',
+            'user_id' => $user->id,
         ]);
         $this->assertEquals(1, Client::count());
     }
@@ -93,13 +90,13 @@ class ClientCRUDTest extends TestCase
             'firstname' => 'Stéphane',
             'email' => 'stephane.hervy@wiklog.fr',
             'user_id' => $user->id,
-            ]);
+        ]);
         $client = Client::factory()->create([
             'adresse' => '6 rue du gorge vert',
             'user_id' => $user->id,
         ])->where('adresse' == '6 rue du gorge bleu');
         $this->assertDatabaseHas('clients', [
-            'adresse' => '6 rue du gorge vert'
+            'adresse' => '6 rue du gorge vert',
         ]);
     }
 
@@ -127,11 +124,10 @@ class ClientCRUDTest extends TestCase
             'firstname' => 'Stéphane',
             'email' => 'stephane.hervy@wiklog.fr',
             'user_id' => $user->id,
-            ]);
+        ]);
 
-            $client->Delete();
-            $this->assertEquals(0, Client::count());
-
+        $client->Delete();
+        $this->assertEquals(0, Client::count());
     }
 
     public function test_Admin_Can_Restore_Client()
@@ -158,11 +154,10 @@ class ClientCRUDTest extends TestCase
             'firstname' => 'Stéphane',
             'email' => 'stephane.hervy@wiklog.fr',
             'user_id' => $user->id,
-            ]);
+        ]);
 
-            $client->Delete();
-            $client->restore();
-            $this->assertEquals(1, Client::count());
-
+        $client->Delete();
+        $client->restore();
+        $this->assertEquals(1, Client::count());
     }
 }

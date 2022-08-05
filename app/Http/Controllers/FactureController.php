@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Client;
 use App\Models\Facture;
-use Illuminate\Support\Str;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -20,6 +19,7 @@ class FactureController extends Controller
     {
         $clients = Client::paginate(15);
         $factures = Facture::all();
+
         return view('facture.index', compact('clients', 'factures'));
     }
 
@@ -33,13 +33,15 @@ class FactureController extends Controller
         $facture = Facture::all();
         $users = User::all();
         $clients = Client::all();
+
         return view('facture.create', compact('users', 'clients', 'facture'));
     }
 
-     /**
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -50,7 +52,7 @@ class FactureController extends Controller
         $document = $request->file('file');
         $documentName = $document->getClientOriginalName();
         $client = Client::where('id', $request->client)->first();
-        $document->move(storage_path('app/' . $client->slug . '/factures'), $documentName);
+        $document->move(storage_path('app/'.$client->slug.'/factures'), $documentName);
 
         $facture = new Facture();
         $facture->name = $documentName;
@@ -58,7 +60,7 @@ class FactureController extends Controller
         $facture->save();
 
         return Redirect::to('facture')
-        ->with('success', 'Facture Created Successfully !');
+            ->with('success', 'Facture Created Successfully !');
     }
 
     public function downloadFacture(Request $request, $facture)
@@ -70,7 +72,7 @@ class FactureController extends Controller
         // $name = Devis::with('client_id', 'id');
 
         // $path = storage_path('app/bechtelar-bernhard/devis/' . $request->deviName);// valide
-        $path = storage_path('app/' . $client->slug . '/factures/' . $facture->name);
+        $path = storage_path('app/'.$client->slug.'/factures/'.$facture->name);
 
         return response()->download($path);
     }

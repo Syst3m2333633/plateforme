@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\File;
 use App\Models\User;
-use App\Models\Devis;
-use App\Models\Facture;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -21,6 +18,7 @@ class UserController extends Controller
     public function index()
     {
         $clients = User::all();
+
         return view('user.index', compact('clients'));
     }
 
@@ -34,21 +32,22 @@ class UserController extends Controller
         $clients = User::all();
         //$user = new User();
 
-        return view('user.create', compact('clients'));//, compact('clients')
+        return view('user.create', compact('clients')); //, compact('clients')
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $clients = User::all();
         $user = new User();
-        Storage::MakeDirectory($request->name . '/devis');
-        Storage::MakeDirectory($request->name . '/factures');
+        Storage::MakeDirectory($request->name.'/devis');
+        Storage::MakeDirectory($request->name.'/factures');
 
         $user->name = $request->name;
         $user->firstname = $request->firstname;
@@ -63,35 +62,38 @@ class UserController extends Controller
 
         $user->password = Hash::make($request->password);
         $user->save();
-        return view('user.create', compact('clients'));//, compact('clients')
 
-                // User::makeDirectory('public/' . $user->name => $request->name);
-                // $repo = $request->file('file');
-                // $repoName = $repo;
-                // $repo->move(storage_path('public/' .$user->name = $request->name), $repoName);
+        return view('user.create', compact('clients')); //, compact('clients')
+
+        // User::makeDirectory('public/' . $user->name => $request->name);
+        // $repo = $request->file('file');
+        // $repoName = $repo;
+        // $repo->move(storage_path('public/' .$user->name = $request->name), $repoName);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         $clients = User::all();
-        return view('user.create', compact('clients'));//, compact('clients
+
+        return view('user.create', compact('clients')); //, compact('clients
     }
 
     /**
@@ -99,6 +101,7 @@ class UserController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -122,10 +125,10 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
     }
 }

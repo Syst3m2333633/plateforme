@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Foundation\Auth\User;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -26,11 +26,9 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('client_create', fn(User $user) => $user->is_admin);
-        Gate::define('client_index', fn(User $user) => $user->is_admin);
-        Gate::define('client_indexation', fn(User $user) => $user->is_admin);
-        Gate::define('client_search', fn(User $user) => $user->is_admin);
-
-        //
+        Gate::define('client_create', fn (User $user) => $user->is_admin);
+        Gate::define('client_index', fn (User $user) => $user->is_admin);
+        Gate::define('client_indexation', fn (User $user) => $user->is_admin);
+        Gate::define('client_search', fn (User $user) => $user->is_admin);
     }
 }

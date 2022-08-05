@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'driver' => env('SCOUT_DRIVER', 'database'),//algolia
+    'driver' => env('SCOUT_DRIVER', 'database'), //algolia
 
     /*
     |--------------------------------------------------------------------------

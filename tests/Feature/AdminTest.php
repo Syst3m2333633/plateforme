@@ -2,11 +2,9 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
+use Tests\TestCase;
 
 class AdminTest extends TestCase
 {
@@ -31,6 +29,4 @@ class AdminTest extends TestCase
         $response = $this->actingAs($admin)->get(route('dashboard'));
         $response->assertStatus(200);
     }
-
-
 }

@@ -2,19 +2,18 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Devis;
 use App\Models\Client;
+use App\Models\Devis;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class DevisControllerTest extends TestCase
 {
     use RefreshDatabase;
+
     /**
      * A basic feature test example.
      *
@@ -56,7 +55,7 @@ class DevisControllerTest extends TestCase
         $client = Client::factory()->create([
             'user_id' => $user->id,
         ]);
-        $document->move(storage_path('app/' . $client->slug . '/devis'), $documentName);
+        $document->move(storage_path('app/'.$client->slug.'/devis'), $documentName);
         $devis = new Devis();
         $devis->name = $document;
         $devis->client_id = $client->id;
@@ -82,13 +81,13 @@ class DevisControllerTest extends TestCase
             'user_id' => $user->id,
         ]);
         // dd($document);
-        $document->move(storage_path('app/' . $client->slug . '/devis'), $documentName);
+        $document->move(storage_path('app/'.$client->slug.'/devis'), $documentName);
         $devis = new Devis();
         $devis->name = $document;
         $devis->client_id = $client->id;
         $devis->save();
         $this->assertEquals(1, Devis::count());
-        return response()->download(storage_path('app/' . $client->slug . '/devis/' . $documentName));
 
+        return response()->download(storage_path('app/'.$client->slug.'/devis/'.$documentName));
     }
 }

@@ -2,15 +2,10 @@
 
 namespace Database\Seeders;
 
-use Bouncer;
-use App\Models\User;
 use App\Models\Client;
-use Illuminate\Support\Str;
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use Database\Seeders\DevisSeeder;
-use Database\Seeders\ClientSeeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {

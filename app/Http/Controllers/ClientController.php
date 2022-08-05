@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Bouncer;
-use App\Models\User;
-use App\Models\Client;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Intervention\Image\Facades\Image;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
+use App\Models\Client;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class ClientController extends Controller
 {
@@ -36,14 +34,15 @@ class ClientController extends Controller
     public function profil()
     {
         $client = Client::where('user_id', 'LIKE', Auth()->user()->id)->first();
+
         return view('client.profil', compact('client'));
     }
 
     public function search(Request $request)
     {
         $search_text = $_GET['searchClient'];
-        $clients = Client::where('raisonSocial', 'LIKE', '%' . $search_text . '%')
-            ->orWhere('name', 'LIKE', '%' . $search_text . '%')
+        $clients = Client::where('raisonSocial', 'LIKE', '%'.$search_text.'%')
+            ->orWhere('name', 'LIKE', '%'.$search_text.'%')
             ->get();
 
         return view('client.search', compact('clients'));
@@ -64,6 +63,7 @@ class ClientController extends Controller
     {
         $clients = Client::onlyTrashed()->get();
         $client = Client::paginate(15);
+
         return view('client.trash', compact('clients'));
     }
 
@@ -71,13 +71,11 @@ class ClientController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StoreClientRequest  $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(StoreClientRequest $request)
     {
-        // Storage::MakeDirectory($request->raisonSocial . '/logo');
-        // Storage::MakeDirectory($request->raisonSocial . '/devis');
-        // Storage::MakeDirectory($request->raisonSocial . '/factures');
         $request->validate([
             'raisonSocial' => 'required',
             'adresse' => 'required',
@@ -90,12 +88,10 @@ class ClientController extends Controller
             'firstname' => 'required',
             'email' => 'required',
             'password' => 'required',
-            // 'avatar' => 'required',//|mimes:jpeg,png,jpg,gif,svg|max:1024
         ]);
         $logo = $request->file('avatar');
         $logoName = $logo->getClientOriginalName();
-        $logo->move(storage_path('app/' . Str::slug($request->raisonSocial) . '/logo'), $logoName);
-
+        $logo->move(storage_path('app/'.Str::slug($request->raisonSocial).'/logo'), $logoName);
         $insert = [
             'raisonSocial' => $request->raisonSocial,
             'slug' => Str::slug($request->raisonSocial),
@@ -112,26 +108,18 @@ class ClientController extends Controller
             'avatar' => $request->avatar->getClientOriginalName(),
             'user_id' => Auth::user()->id,
         ];
-
         Client::insertGetId($insert);
-
         $user = [
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ];
-
         User::insertGetId($user);
-
-        //     return Redirect::to('client')
-        //    ->with('success','Client created successfully.');
-
         //Creation de stockage individuel
-        Storage::MakeDirectory(Str::slug($request->raisonSocial) . '/logo');
-        Storage::MakeDirectory(Str::slug($request->raisonSocial) . '/devis');
-        Storage::MakeDirectory(Str::slug($request->raisonSocial) . '/factures');
-        Storage::MakeDirectory(Str::slug($request->raisonSocial) . '/event');
-
+        Storage::MakeDirectory(Str::slug($request->raisonSocial).'/logo');
+        Storage::MakeDirectory(Str::slug($request->raisonSocial).'/devis');
+        Storage::MakeDirectory(Str::slug($request->raisonSocial).'/factures');
+        Storage::MakeDirectory(Str::slug($request->raisonSocial).'/event');
         return Redirect::to('client')
             ->with('success', 'Greate ! Client Created Successfully.');
     }
@@ -139,6 +127,7 @@ class ClientController extends Controller
     public function image(Client $client)
     {
         $image = Image::make($client->image);
+
         return $image->response();
     }
 
@@ -146,6 +135,7 @@ class ClientController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Client  $client
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(Client $client)
@@ -157,6 +147,7 @@ class ClientController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Client  $client
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Client $client)
@@ -169,6 +160,7 @@ class ClientController extends Controller
      *
      * @param  \App\Http\Requests\UpdateClientRequest  $request
      * @param  \App\Models\Client  $client
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateClientRequest $request, Client $client)
@@ -186,12 +178,10 @@ class ClientController extends Controller
             'email' => 'required',
         ]);
 
-
-
         $client->update(
             $request->all(),
             [
-                $client->update(['slug' => Str::slug($request->raisonSocial)])
+                $client->update(['slug' => Str::slug($request->raisonSocial)]),
             ]
         );
 
@@ -207,6 +197,7 @@ class ClientController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Client  $client
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Client $client)
@@ -221,18 +212,19 @@ class ClientController extends Controller
      * Restore the specified resource from storage.
      *
      * @param  \App\Models\Client  $client
+     *
      * @return \Illuminate\Http\Response
      */
     public function restore(Client $client)
     {
         $toto = $client->restore();
 
-        if ($toto != Null && $toto) {
+        if ($toto !== null && $toto) {
             return redirect()->route('client.index')
                 ->with('success', 'Client Restored Successfully');
-        } else {
-            return redirect()->route('client.index')
-                ->with('error', 'Client not restored');
         }
+
+        return redirect()->route('client.index')
+            ->with('error', 'Client not restored');
     }
 }

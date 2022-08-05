@@ -3,15 +3,15 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\User;
 use App\Models\Client;
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-
 
 class UserTest extends TestCase
 {
     use RefreshDatabase;
+
     /**
      * A basic feature test example.
      *
@@ -52,54 +52,18 @@ class UserTest extends TestCase
         $response->assertStatus(200);
     }
 
-    // /**
-    //  * A basic feature test example.
-    //  *
-    //  * @return void
-    //  */
-    // public function test_Chek_Unique_Email_User()
-    // {
-    //     $admin = \App\Models\User::factory()->create([
-    //         'id' => 2,
-    //         'name' => 'client',
-    //         'email' => 'client@example.com',
-    //         'password' => Hash::make('wiklog1234'),
-    //         'is_admin' => 0,
-    //     ]);
-    //     $admin->assign('client');
-
-    //     $response = $this->actingAs($admin)->get(route('dashboard'));
-    //     $response->assertStatus(200);
-    // }
 
     // /**
     //  * A basic feature test example.
     //  *
     //  * @return void
     //  */
-    // public function test_Update_Client_User()
+    // public function test_Relation_User_Clients()
     // {
-    //     $client = Client::all();
-    //     $admin = \App\Models\User::factory()->create([
-    //         'id' => 2,
-    //         'name' => 'client',
-    //         'email' => 'client@exemple.com',
-    //         'password' => Hash::make('wiklog1234'),
-    //         'is_admin' => 0,
-    //     ]);
-    //     $admin->assign('client');
-
-    //     $response = $this->actingAs($admin)->get(route('client.update', ['client' => $admin]));
-    //     $response->assertStatus(200);
+    //     $user = User::factory()
+    //             ->hasClient(1)
+    //             ->create();
+    //     $this->assertEquals(1, Client::count());
     // }
-
-
-
-    // public function test_if_user_not_logged_in()
-    // {
-    //     $returnedValues = (new ClientController)->create();
-    //     $this->assertEmpty($returnedValues);
-    // }
-
 
 }

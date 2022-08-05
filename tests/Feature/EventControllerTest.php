@@ -2,15 +2,14 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Devis;
 use App\Models\Client;
+use App\Models\Devis;
 use App\Models\Event;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class EventControllerTest extends TestCase
 {
@@ -45,7 +44,7 @@ class EventControllerTest extends TestCase
         $client = Client::factory()->create([
             'user_id' => $user->id,
         ]);
-        $document->move(storage_path('app/' . $client->slug . '/devis'), $documentName);
+        $document->move(storage_path('app/'.$client->slug.'/devis'), $documentName);
         $devis = new Devis();
         $devis->name = $document;
         $devis->client_id = $client->id;
@@ -71,13 +70,13 @@ class EventControllerTest extends TestCase
             'user_id' => $user->id,
         ]);
         // dd($document);
-        $document->move(storage_path('app/' . $client->slug . '/event'), $documentName);
+        $document->move(storage_path('app/'.$client->slug.'/event'), $documentName);
         $event = new Event();
 
         $event->client_id = $client->id;
         $event->save();
         $this->assertEquals(1, Event::count());
-        return response()->download(storage_path('app/' . $client->slug . '/event/' . $documentName));
 
+        return response()->download(storage_path('app/'.$client->slug.'/event/'.$documentName));
     }
 }

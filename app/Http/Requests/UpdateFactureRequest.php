@@ -24,7 +24,7 @@ class UpdateFactureRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+
         ];
     }
 }

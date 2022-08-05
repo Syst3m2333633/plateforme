@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -20,10 +21,11 @@ class ClientFactory extends Factory
     {
         $raisonSocial = $this->faker->company();
         $slug = Str::slug($raisonSocial);
-        Storage::MakeDirectory($slug . '/logo');
-        Storage::MakeDirectory($slug . '/devis');
-        Storage::MakeDirectory($slug . '/factures');
-        Storage::MakeDirectory($slug . '/event');
+        Storage::MakeDirectory($slug.'/logo');
+        Storage::MakeDirectory($slug.'/devis');
+        Storage::MakeDirectory($slug.'/factures');
+        Storage::MakeDirectory($slug.'/event');
+
         return [
             'raisonSocial' => $raisonSocial,
             // $slug = 'raisonSocial' => $this->faker->company(),
@@ -39,7 +41,7 @@ class ClientFactory extends Factory
             'email' => $this->faker->email(),
             'password' => $this->faker->password(),
             // 'avatar' => $this->faker->imageURL(640, 480),
-            'user_id' => $this->faker->numberBetween(1, 2),
+            'user_id' => User::Factory()->create(),
             // 'user_id' => $this->faker->13,
         ];
     }
