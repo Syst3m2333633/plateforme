@@ -26,17 +26,9 @@ class EventController extends Controller
 
     public function downloadEvent(Request $request, $events)
     {
-        // dd($devis);
-        // dd($events);
         $client = Client::findOrFail($events);
         $event = Event::where('client_id', $events)->first();
-        // dd($devis);
-        // $name = Devis::with('client_id', 'id');
-
-        // $path = storage_path('app/bechtelar-bernhard/devis/' . $request->deviName);// valide
-
-        $path = storage_path('app/'.$client->slug.'/event/'.$event->name);
-
+        $path = storage_path('app/' . $client->slug . '/event/' . $event->name);
         return response()->download($path);
     }
 
@@ -63,93 +55,32 @@ class EventController extends Controller
      */
     public function store(EventRequest $request/*, $event*/)
     {
+        //Required fields
         $request->validate([
-            // 'client' => 'required',
             'titre' => 'required',
             'message' => 'required',
-            'file' => 'required',
         ]);
-        $document = $request->file('file');
-        $documentName = $document->getClientOriginalName();
-        // $client = Client::where('id', $request->client)->first();
+        //Get cLient with user_id
         $client = Client::where('user_id', 'LIKE', Auth()->user()->id)->first();
-        // dd($client);
-        $document->move(storage_path('app/'.$client->slug.'/event'), $documentName);
-
+        //Document management
+        if ($request->file != "") {
+            $document = $request->file('file'); //Event file
+            $documentName = $document->getClientOriginalName(); //Event name
+            //Event directory
+            $document->move(storage_path('app/' . $client->slug . '/event'), $documentName);
+        }
+        //Event Creation
         $event = new Event();
-        $event->name = $documentName;
+        if ($request->file != "") {
+            $event->name = $documentName;
+        }
         $event->titre = $request->titre;
         $event->message = $request->message;
         $event->client_id = $client->id;
-
+        //Event save
         $event->save();
-
+        //Redirection with message
         return Redirect::to('event')
             ->with('success', 'Greate ! event added successfully.');
-
-        // $insert = [
-        //     'titre' => $request->titre,
-        //     'message' => $request->message,
-        //     'path' => $document,
-        //     'client_id' => $event->client_id,
-        // ];
-        // Event::insertGetId($insert);
-
-        // $event = new Event();
-        // $event->titre = $request->titre;
-        // $event->message = $request->message;
-        // $event->path = $document;
-
-        // Event::insetGetId($insert);
-
-        // $event->save();
-        // return view('client');//event.create
-
-        // return view('confirm');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
     }
 }

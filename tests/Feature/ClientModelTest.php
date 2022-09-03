@@ -4,8 +4,9 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\User;
-use App\Models\Client;
+use App\Models\Devis;
 use App\Models\Event;
+use App\Models\Client;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -35,6 +36,8 @@ class ClientModelTest extends TestCase
     {
         $user = User::factory()->create();
         $client = Client::factory()->create(['user_id' => $user->id]);
+        $client = $user->client;
+        $this->assertNotNull($client);
         $this->assertEquals(1, Client::count() && 1, User::count());
     }
 
@@ -43,14 +46,26 @@ class ClientModelTest extends TestCase
     *
     * @return void
     */
-    public function test_Event_Belong_To_A_Client()
+    public function test_Client_Has_Many_Devis()
     {
         $user = User::factory()->create();
-        // $client = Client::factory()->create(['user_id' => $user->id]);
-        $event = Event::factory()->create();
-        $client = $event->client;
-        $this->assertNotNull($client);
-        $this->assertEquals(1, Event::count() && 1, Client::count());
+        $client = Client::factory()->create(['user_id' => $user->id]);
+        $devis = Devis::factory()->create(['client_id' => $client->id]);
+        $this->assertTrue($client->devis->contains($devis));
+        $this->assertEquals(1, Devis::count() && 1, Client::count() && 1, User::count());
     }
 
+    /**
+    * A basic feature test example.
+    *
+    * @return void
+    */
+    public function test_Client_Has_Many_Event()
+    {
+        $user = User::factory()->create();
+        $client = Client::factory()->create(['user_id' => $user->id]);
+        $event = Event::factory()->create(['client_id' => $client->id]);
+        $this->assertTrue($client->event->contains($event));
+        $this->assertEquals(1, User::count() && 1, Client::count() && 1, User::count());
+    }
 }

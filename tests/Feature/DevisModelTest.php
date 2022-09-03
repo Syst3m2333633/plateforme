@@ -36,11 +36,14 @@ class DevisModelTest extends TestCase
     *
     * @return void
     */
-    public function test_Devis_Belong_To_A_User()
+    public function test_Devis_Belong_To_A_Client()
     {
         $user = User::factory()->create();
         $client = Client::factory()->create(['user_id' => $user->id]);
         $devis = Devis::factory()->create(['client_id' => $client->id]);
+        $client = $devis->client;
+        $this->assertNotNull($client);
+        $this->assertNotNull($devis);
         $this->assertEquals(1, Devis::count() && 1, Client::count());
     }
 }

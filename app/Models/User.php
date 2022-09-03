@@ -88,21 +88,21 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    //Relation entre user et devis
-    public function devis()
-    {
-        return $this->belongsTo(Devis::class);
-    }
+    // //Relation entre user et devis user
+    // public function devis()
+    // {
+    //     return $this->belongsTo(Devis::class);
+    // }
 
-    //Relation entre user et facture
-    public function facture()
-    {
-        return $this->belongsTo(Facture::class);
-    }
+    // //Relation entre user et facture
+    // public function facture()
+    // {
+    //     return $this->belongsTo(Facture::class);
+    // }
 
     //Relation entre user et client
     public function client()
     {
-        return $this->belongsTo(Client::class);
+        return $this->hasMany(Client::class);
     }
 }

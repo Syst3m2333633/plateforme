@@ -78,7 +78,7 @@ class Client extends Model
     use SoftDeletes, HasFactory, Searchable;
 
     protected $fillable = [
-        'raisonSocial', 'slug', 'adresse', 'complAdresse', 'codePostal', 'ville', 'pays', 'telephone', 'name', 'firstname', 'email', 'logo', 'user_id',
+        'raisonSocial', 'slug', 'adresse', 'complAdresse', 'codePostal', 'ville', 'pays', 'telephone', 'name', 'firstname', 'email', 'avatar', 'user_id',
     ];
 
     /**
@@ -93,7 +93,7 @@ class Client extends Model
     //Relation entre client et user
     public function user()
     {
-        return $this->hasMany(Client::class);
+        return $this->belongs(User::class);
     }
 
     //Relation entre client et devis
@@ -105,7 +105,7 @@ class Client extends Model
     //Relation entre client et event
     public function event()
     {
-        return $this->hasMany(Devis::class);
+        return $this->hasMany(Event::class);
     }
 
     public function sluggable(): array

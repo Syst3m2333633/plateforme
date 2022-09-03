@@ -20,12 +20,11 @@ class FactureFactory extends Factory
     {
             $clients = Client::all();
         foreach ($clients as $client) {
-            $name = $client->raisonSocial;
-            $slug = Str::slug($name);
+            $name = Str::slug($client->raisonSocial);
 
             return [
                 'name' => $this->faker->randomElement($array = ['Mise à jour', 'Ajout de fonctionnalité', 'Migration de serveur', 'Débogage', 'Transfert de BDD', 'Correction général', 'Création de site internet vitrine', 'création site e-commerce']),
-                'path' => storage_path('app/'.$slug.'/factures'),
+                'path' => storage_path('app/'.$name.'/factures'),
                 'client_id' => $this->faker->numberBetween(1, 10),
                 'created_at' => $this->faker->date(),
             ];

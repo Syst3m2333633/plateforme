@@ -6,7 +6,7 @@
             {{-- <h4 class="card-header">Edit Client</h4>{{$client->avatar}} --}}
             {{-- @dd($client->slug) --}}
             <img class="img-fluid" style="height:20vh" src="{{ asset('client.image', ['client' => $client->slug]) }}" alt="avatar">
-            {{-- <img src="{{route('storage/' . $client->raisonSocial . '/logo/' . $client->avatar) }}" alt="avatar"> --}}
+            {{-- <img src="{{asset('storage/app/'.$client->slug.'/logo/'.$client->avatar)}}" alt="avatar"> --}}
             <a class="btn btn-primary" href="{{ route('client.index') }}">Retour</a>
 
 

@@ -31,12 +31,41 @@ class DevisControllerTest extends TestCase
      *
      * @return void
      */
+    public function test_Client_Can_See_Devis_Indexe()
+    {
+        $admin = User::factory()->create(['is_admin' => 1]);
+        $client = Client::factory()->create(['user_id' => $admin->id]);
+        $response = $this->actingAs($admin)->get(route('devis.indexe'));
+        $response->assertViewIs('devis.indexe');
+    }
+
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
     public function test_Admin_Can_See_Devis_Create()
     {
         $admin = User::factory()->create(['is_admin' => 1]);
         $response = $this->actingAs($admin)->get(route('devis.create'));
         $response->assertViewIs('devis.create');
     }
+
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function test_Admin_Can_See_Devis_Show()
+    {
+        $admin = User::factory()->create(['is_admin' => 1]);
+        $client = Client::factory()->create(['user_id' => $admin->id]);
+        $devis = Devis::factory()->create(['client_id' => $client->id]);
+        $response = $this->actingAs($admin)->get(route('devis.show', ['devi' => $devis]));
+        $response->assertViewIs('devis.show');
+    }
+
+
 
     /**
      * A basic feature test example.

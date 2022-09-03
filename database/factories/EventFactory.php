@@ -18,8 +18,8 @@ class EventFactory extends Factory
      */
     public function definition()
     {
-        $client = Client::factory()->create();
-        // foreach ($clients as $client) {
+        $clients = Client::all();
+        foreach ($clients as $client) {
             $name = $client->raisonSocial;
             $slug = Str::slug($name);
             // dd($client);
@@ -31,6 +31,6 @@ class EventFactory extends Factory
 
                 'created_at' => $this->faker->date(),
             ];
-        // }
+        }
     }
 }

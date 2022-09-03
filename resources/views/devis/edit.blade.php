@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row card text-white bg-dark">
             {{-- <h4 class="card-header">Edit Client</h4>{{$client->avatar}} --}}
-            <img class="img-fluid" style="height:40vh" src="{{ route('client.image', ['client' => $client->slug]) }}" alt="avatar">
+            <img class="img-fluid" style="height:40vh" src="{{ route('client.image', ['client' => $client->avatar]) }}" alt="avatar">
             {{-- <img src="{{route('storage/' . $client->raisonSocial . '/logo/' . $client->avatar) }}" alt="avatar"> --}}
             <a class="btn btn-primary" href="{{ route('client.index') }}">Retour</a>
 

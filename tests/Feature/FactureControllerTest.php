@@ -31,12 +31,27 @@ class FactureControllerTest extends TestCase
      *
      * @return void
      */
+    public function test_Client_Can_See_Devis_Indexe()
+    {
+        $admin = User::factory()->create(['is_admin' => 1]);
+        $client = Client::factory()->create(['user_id' => $admin->id]);
+        $response = $this->actingAs($admin)->get(route('facture.indexe'));
+        $response->assertViewIs('facture.indexe');
+    }
+
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
     public function test_Admin_Can_See_Facture_Create()
     {
         $admin = User::factory()->create(['is_admin' => 1]);
         $response = $this->actingAs($admin)->get(route('facture.create'));
         $response->assertViewIs('facture.create');
     }
+
+
 
     /**
      * A basic feature test example.

@@ -22,7 +22,9 @@
                     </thead>
                     <tbody>
                         @foreach ($clients as $client)
-                            <tr>
+                        @if ($client->id %2 === 0)
+                        <tr class="bg-secondary">
+                        @endif
                                 <td>{{ $client->raisonSocial }}</td>
                                 <td>
                                     @foreach ($factures as $facture)

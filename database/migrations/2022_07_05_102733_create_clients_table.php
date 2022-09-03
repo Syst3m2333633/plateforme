@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('password');
 
             //Logo
-            $table->text('avatar');
+            $table->string('avatar');
             //Token
             $table->string('CodeClimate')->nullable();
             $table->string('CodeCov')->nullable();

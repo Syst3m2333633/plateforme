@@ -17,11 +17,11 @@ class DevisController extends Controller
      */
     public function index()
     {
-        $client = Client::where('user_id', 'LIKE', Auth()->user()->id)->first();
+        // $client = Client::where('user_id', 'LIKE', Auth()->user()->id)->first();
         $clients = Client::paginate(15);
         $devis = Devis::all();
 
-        return view('devis.index', compact('clients', 'devis', 'client'));
+    return view('devis.index', compact('clients', 'devis'/*, 'client'*/));
     }
 
     /**
@@ -102,7 +102,7 @@ class DevisController extends Controller
     {
         // dd($devis);
         $client = Client::findOrFail($devis);
-        $devis = Devis::where('client_id', $devis)->first();
+        $devis = Devis::where('client_id', $devis)->get($devis);
         // dd($devis);
         // $name = Devis::with('client_id', 'id');
 

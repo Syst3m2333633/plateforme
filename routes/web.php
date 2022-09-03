@@ -62,15 +62,6 @@ Route::resource('client', ClientController::class,
 
 Route::resource('user', UserController::class);
 
-Route::get('dropzone', [DropzoneController::class, 'dropzone']);
-Route::post('droplogo/store', [DropzoneController::class, 'droplogoStore'])
-    ->name('droplogo.store');
-
-Route::post('dropevent/store', [DropzoneController::class, 'dropeventStore'])
-    ->name('dropevent.store');
-
-Route::post('dropFacturesStore/store', [DropzoneController::class, 'store'])
-    ->name('dropFacturesStore.store');
 Route::get('facture/{facture}/download', [FactureController::class, 'downloadFacture'])
     ->name('facture.download');
     Route::get('facture.index', [FactureController::class, 'indexe'])->name('facture.indexe');

@@ -23,7 +23,9 @@
                     <tbody>
                         @foreach ($clients as $client)
                         @foreach ($events as $event)
-                            <tr>
+                        @if ($client->id %2 === 0)
+                        <tr class="bg-secondary">
+                        @endif
                                 @if ($event->client_id == $client->id)
 
                                 <td>{{ $client->raisonSocial }}</td>

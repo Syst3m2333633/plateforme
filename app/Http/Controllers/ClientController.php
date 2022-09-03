@@ -91,17 +91,16 @@ class ClientController extends Controller
             'email' => 'required',
             'password' => 'required',
         ]);
-        $logo = $request->file('avatar');
-        $logoName = $logo->getClientOriginalName();
-        $logo->move(storage_path('app/'.Str::slug($request->raisonSocial).'/logo'), $logoName);
+        $logo = $request->file('avatar');//logo file
+        $logoName = $logo->getClientOriginalName();//logo name
+        $logo->move(storage_path('app/'.Str::slug($request->raisonSocial).'/logo'), $logoName);//logo directory
         $user = [
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ];
-        User::insertGetId($user);
-        $user = DB::table('users')->get()->last();
-        // dd($user->id);
+        User::insertGetId($user);//User Creation when new Client is created
+        $user = DB::table('users')->get()->last();//Get last user in DB
         $insert = [
             'raisonSocial' => $request->raisonSocial,
             'slug' => Str::slug($request->raisonSocial),
@@ -118,12 +117,13 @@ class ClientController extends Controller
             'avatar' => $request->avatar->getClientOriginalName(),
             'user_id' => $user->id,
         ];
-        Client::insertGetId($insert);
-        //Creation de stockage individuel
+        Client::insertGetId($insert);// Client Inserts
+        //Individual storage
         Storage::MakeDirectory(Str::slug($request->raisonSocial).'/logo');
         Storage::MakeDirectory(Str::slug($request->raisonSocial).'/devis');
         Storage::MakeDirectory(Str::slug($request->raisonSocial).'/factures');
         Storage::MakeDirectory(Str::slug($request->raisonSocial).'/event');
+        //Redirection with message when it's over
         return Redirect::to('client')
             ->with('success', 'Greate ! Client Created Successfully.');
     }
@@ -131,7 +131,6 @@ class ClientController extends Controller
     public function image(Client $client)
     {
         $image = Image::make($client->image);
-
         return $image->response();
     }
 
